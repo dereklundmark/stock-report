@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>STOCK ✦ REPORT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { font-family: 'Archivo', sans-serif; background: #07080D; color: #EDF0F3; }
+    ::-webkit-scrollbar { height: 6px; width: 6px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 6px; }
+    image-slot { display: block; }
+    .tabs-desktop { display: flex; gap: 0; overflow-x: auto; flex: 1; justify-content: flex-end; }
+    .tabs-mobile-btn { display: none !important; }
+    @media (max-width: 640px) {
+      .tabs-desktop { display: none !important; }
+      .tabs-mobile-btn { display: flex !important; align-items: center; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div style="min-height:100vh; background:#07080D;">
+    <div id="nav" style="position:sticky;top:0;z-index:30;background:rgba(7,8,13,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.05);"></div>
+    <div id="tab-content"></div>
+    <div id="session-overlay" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(7,8,13,.97);flex-direction:column;overflow:hidden;"></div>
+  </div>
+
+  <!-- Data + Web Components -->
+  <script src="image-slot.js"></script>
+  <script src="smash-data.js?v=8"></script>
+  <script src="smash-prefs.js"></script>
+
+  <!-- Tab Renders (must load before app-core) -->
+  <script src="tab-home.js"></script>
+  <script src="tab-teamsheet.js"></script>
+  <script src="tab-battlegrounds.js"></script>
+  <script src="tab-lore.js"></script>
+  <script src="tab-roster.js"></script>
+  <script src="tab-session.js"></script>
+
+  <!-- Core App -->
+  <script src="app-core.js"></script>
+</body>
+</html>
