@@ -184,7 +184,7 @@ function renderLore() {
       <div style="font-size:13px;color:#9AA3AF;margin-bottom:18px;line-height:1.5;">He wins when his character is brooding, shirtless, or both.</div>
 
       <div style="background:#0F1217;border:1px solid rgba(255,82,70,.12);border-radius:10px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;">
-        <image-slot id="shirtless-img" src="characters/shulk.png" fit="contain" shape="rounded" radius="6" style="width:70px;height:70px;flex-shrink:0;filter:drop-shadow(0 3px 10px rgba(0,0,0,.6));"></image-slot>
+        <image-slot id="shirtless-img" src="characters/shulk_shirtless.png" fit="contain" shape="rounded" radius="6" style="width:70px;height:70px;flex-shrink:0;filter:drop-shadow(0 3px 10px rgba(0,0,0,.6));"></image-slot>
         <div style="flex:1;min-width:0;">
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#FF5246;margin-bottom:4px;">SHIRTLESS MALES</div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#3C4450;letter-spacing:.06em;margin-bottom:8px;">SEPHIROTH · KAZUYA · SHULK</div>
