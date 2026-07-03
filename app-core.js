@@ -253,8 +253,8 @@ function closeSession() { S.showSession = false; render(); }
 function diveDeeper() { setTab('prefs'); }
 
 // Auth
-function setLoginEmail(val) { Object.assign(S, { loginEmail: val, loginError: '' }); render(); }
-function setLoginPassword(val) { Object.assign(S, { loginPassword: val, loginError: '' }); render(); }
+function setLoginEmail(val) { S.loginEmail = val; }
+function setLoginPassword(val) { S.loginPassword = val; }
 async function submitLogin() {
   if (!S.loginEmail || !S.loginPassword) {
     S.loginError = 'Please enter your email and password.';
