@@ -2,9 +2,10 @@
    Fetches matches + characters from Supabase for rivalry_id = 1
    and computes window.SMASH_DATA in the same shape as the old smash-data.js,
    so every tab renders exactly as before — but now from live data.
+   A Realtime listener re-fetches and recomputes whenever a new match is inserted.
 */
 
-(async function () {
+async function loadSmashData() {
   const sb = window._supabase;
 
   /* ── fetch both tables in parallel ───────────────────────── */
@@ -17,7 +18,23 @@
   if (cRes.error) { console.error('characters fetch:', cRes.error); return; }
 
   window.SMASH_DATA = compute(mRes.data || [], cRes.data || []);
-})();
+
+  // Trigger a re-render if the app is already initialised
+  if (typeof render === 'function' && window.SMASH_PREFS) render();
+}
+
+// Initial load
+loadSmashData();
+
+// Realtime listener — re-fetches whenever a match is inserted
+window._supabase
+  .channel('matches-live')
+  .on(
+    'postgres_changes',
+    { event: 'INSERT', schema: 'public', table: 'matches' },
+    () => { loadSmashData(); }
+  )
+  .subscribe();
 
 
 /* ═══════════════════════════════════════════════════════════════
