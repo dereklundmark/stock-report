@@ -169,7 +169,7 @@ function compute(raw, chars) {
 
   /* ── sudden death games ───────────────────────────────────── */
   const suddenDeath = ms.filter(m => m.sd).map(m => ({
-    d: m.dc, e: m.ec, dslug: m.dSlug, eslug: m.eSlug,
+    dc: m.dc, ec: m.ec, dslug: m.dSlug, eslug: m.eSlug,
     won: m.dWin ? 'D' : 'E'
   }));
 
