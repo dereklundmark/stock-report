@@ -255,23 +255,64 @@ function diveDeeper() { setTab('prefs'); }
 // Auth
 function setLoginEmail(val) { Object.assign(S, { loginEmail: val, loginError: '' }); render(); }
 function setLoginPassword(val) { Object.assign(S, { loginPassword: val, loginError: '' }); render(); }
-function submitLogin() {
+async function submitLogin() {
   if (!S.loginEmail || !S.loginPassword) {
     S.loginError = 'Please enter your email and password.';
     render(); return;
   }
   Object.assign(S, { loginLoading: true, loginError: '' }); render();
-  setTimeout(() => {
-    if (S.loginPassword === 'smash') {
-      Object.assign(S, { isLoggedIn: true, loginLoading: false, loginError: '', sessionScreen: 'select' });
-    } else {
-      Object.assign(S, { loginLoading: false, loginError: 'Incorrect email or password.' });
-    }
-    render();
-  }, 800);
+  const { data, error } = await window._supabase.auth.signInWithPassword({
+    email: S.loginEmail, password: S.loginPassword
+  });
+  if (error) {
+    Object.assign(S, { loginLoading: false, loginError: 'Incorrect email or password.' });
+    render(); return;
+  }
+  // Load this player's rivalries
+  const uid = data.user.id;
+  const { data: playerRow } = await window._supabase
+    .from('players').select('id,name,is_admin').eq('auth_id', uid).single();
+  const isAdmin = playerRow ? playerRow.is_admin : false;
+  const pid     = playerRow ? playerRow.id       : null;
+  let rivalriesData = [];
+  if (isAdmin) {
+    const { data: rv } = await window._supabase
+      .from('rivalries').select('id,name,p1_id,p2_id');
+    rivalriesData = rv || [];
+  } else if (pid) {
+    const { data: rv } = await window._supabase
+      .from('rivalries').select('id,name,p1_id,p2_id')
+      .or(`p1_id.eq.${pid},p2_id.eq.${pid}`);
+    rivalriesData = rv || [];
+  }
+  const { data: allPlayers } = await window._supabase
+    .from('players').select('id,name,color');
+  const playerMap = {};
+  for (const p of (allPlayers || [])) playerMap[p.id] = p;
+  const { data: matchCounts } = await window._supabase
+    .from('matches').select('rivalry_id');
+  const mcMap = {};
+  for (const mc of (matchCounts || [])) {
+    mcMap[mc.rivalry_id] = (mcMap[mc.rivalry_id] || 0) + 1;
+  }
+  const dashboards = rivalriesData.map(rv => ({
+    id:    rv.id,
+    name:  rv.name,
+    p1:    (playerMap[rv.p1_id] || {}).name || 'P1',
+    p2:    (playerMap[rv.p2_id] || {}).name || 'P2',
+    p1c:   (playerMap[rv.p1_id] || {}).color || '#FF5246',
+    p2c:   (playerMap[rv.p2_id] || {}).color || '#1FA0E0',
+    games: mcMap[rv.id] || 0
+  }));
+  Object.assign(S, { isLoggedIn: true, loginLoading: false, loginError: '',
+    isAdmin, dashboards,
+    sessionScreen: dashboards.length === 1 ? 'session' : 'select',
+    activeDashboard: dashboards.length === 1 ? dashboards[0].id : null });
+  render();
 }
 function submitLoginOnEnter(e) { if (e.key === 'Enter') submitLogin(); }
-function logout() {
+async function logout() {
+  await window._supabase.auth.signOut();
   Object.assign(S, { isLoggedIn: false, sessionScreen: 'login', loginEmail: '', loginPassword: '', loginError: '' });
   render();
 }
@@ -342,10 +383,33 @@ function setFSD() { S.currentMatch.fs = S.currentMatch.fs === 'D' ? '' : 'D'; re
 function setFSE() { S.currentMatch.fs = S.currentMatch.fs === 'E' ? '' : 'E'; render(); }
 function setNote(val)  { S.currentMatch.note = val; } // No render — textarea updates itself
 
-function logMatch() {
+async function logMatch() {
   const cm = S.currentMatch;
   if (!cm.dc || !cm.ec || !cm.outcome) return;
-  const match = { ...cm, venue: S.sessionVenue, date: new Date().toISOString().slice(0, 10) };
+  const today = new Date().toISOString().slice(0, 10);
+  const rivalryId = typeof S.activeDashboard === 'number' ? S.activeDashboard : 1;
+  const row = {
+    rivalry_id:  rivalryId,
+    date:        today,
+    p1_char:     cm.dc,
+    p1_kills:    cm.dKills || 0,
+    p1_screams:  cm.dScr   || 0,
+    p2_char:     cm.ec,
+    p2_kills:    cm.eKills || 0,
+    p2_screams:  cm.eScr   || 0,
+    winner:      cm.outcome === 'D' ? 'p1' : 'p2',
+    first_hit:   cm.fh === 'D' ? 'p1' : cm.fh === 'E' ? 'p2' : null,
+    first_stock: cm.fs === 'D' ? 'p1' : cm.fs === 'E' ? 'p2' : null,
+    platforms:   cm.platform === 'Y',
+    sudden_death: cm.sd === 'Y',
+    venue:       S.sessionVenue === 'online' ? 'Online' : 'In-Person',
+    notes:       cm.note || null
+  };
+  // Write to Supabase
+  const { error } = await window._supabase.from('matches').insert([row]);
+  if (error) { console.error('logMatch insert error:', error); }
+
+  const match = { ...cm, venue: S.sessionVenue, date: today };
   const nm = [...S.sessionMatches, match];
   S.sessionMatches = nm;
   Object.assign(S.currentMatch, { dc:'',ec:'',dcSlug:'',ecSlug:'',outcome:'',dKills:0,eKills:0,dScr:0,eScr:0,fh:'',fs:'',sd:'N',note:'' });
