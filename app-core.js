@@ -47,8 +47,7 @@ const S = {
 
 // Restore persisted state
 try {
-  const t = localStorage.getItem('smash_tab');
-  if (t && ['home','prefs','battlegrounds','lore','roster'].includes(t)) S.tab = t;
+
   const sm = localStorage.getItem('smash_session_matches');
   if (sm) S.sessionMatches = JSON.parse(sm);
 } catch(e) {}
