@@ -16,6 +16,8 @@ function renderLore() {
   const p2Name  = (D.p2Name  || 'P2').toUpperCase();
   const p1Color = D.p1Color  || '#FF5246';
   const p2Color = D.p2Color  || '#1FA0E0';
+  const P1 = p1Name;
+  const P2 = p2Name;
 
   // ---- FIRST STOCK ----
   const _fsDiff = Math.abs((fs.ePct||0) - (fs.dPct||0));
