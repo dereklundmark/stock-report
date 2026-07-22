@@ -87,17 +87,46 @@ function renderTeamSheet() {
     if (!ta || !ta.weightLabel) return '';
     const rgba = col === '#FF5246' ? '255,82,70' : '31,160,224';
     const dash = col === '#FF5246' ? '255,82,70' : '31,160,224';
+
+    const barPct = (val, scale) =>
+      Math.max(0, Math.min(100, (parseFloat(val) - scale.min) / (scale.max - scale.min) * 100)).toFixed(1);
+
+    const miniBar = (pct) =>
+      `<div style="height:5px;background:rgba(255,255,255,.07);border-radius:3px;margin:5px 0 3px;overflow:hidden;">
+        <div style="width:${pct}%;height:100%;background:${col};border-radius:3px;"></div>
+      </div>`;
+
+    const trait = (label, descriptor, pct, loLabel, hiLabel, valDisplay) =>
+      `<div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">${label}</div>
+        <div style="font-weight:800;font-size:12px;line-height:1.3;">${descriptor}</div>
+        ${miniBar(pct)}
+        <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:8px;">
+          <span style="color:#5C6470;">${loLabel}</span>
+          <span style="color:#9AA3AF;">${valDisplay}</span>
+          <span style="color:#5C6470;">${hiLabel}</span>
+        </div>
+      </div>`;
+
     return `<div style="margin-top:16px;padding:14px;background:rgba(${rgba},.06);border:1px solid rgba(${rgba},.18);border-radius:10px;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:${col};font-weight:700;margin-bottom:10px;">TEAM TRAITS</div>
-      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;">
-        <div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">WEIGHT</div><div style="font-weight:800;font-size:13px;">${ta.weightLabel}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">avg ${ta.weightVal}</div></div>
-        <div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">SPEED</div><div style="font-weight:800;font-size:13px;">${ta.speedLabel}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">avg ${ta.speedVal}/9</div></div>
-        <div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">KILL POWER</div><div style="font-weight:800;font-size:13px;">${ta.powerLabel}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">avg ${ta.powerVal}</div></div>
-        <div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">COMBO GAME</div><div style="font-weight:800;font-size:13px;">${ta.comboLabel}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">avg ${ta.comboVal}</div></div>
-        <div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">2026 TIER</div><div style="font-weight:800;font-size:13px;">${ta.tierShare}% Top 20</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">${ta.tierShareLabel}</div></div>
-        <div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">GENDER MIX</div><div style="font-weight:800;font-size:13px;">♂${ta.gM} · ⚥${ta.gX} · ♀${ta.gF}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">fighters (out of 6)</div></div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;">
+        ${trait('WEIGHT',     ta.weightLabel, barPct(ta.weightVal, sc.weight),     'LIGHT',  'HEAVY',     'avg ' + ta.weightVal)}
+        ${trait('SPEED',      ta.speedLabel,  barPct(ta.speedVal,  sc.speed),      'SLOW',   'FAST',      'avg ' + ta.speedVal + '/9')}
+        ${trait('KILL POWER', ta.powerLabel,  barPct(ta.powerVal,  sc.killpower),  'SOFT',   'CRUSHING',  'avg ' + ta.powerVal)}
+        ${trait('COMBO GAME', ta.comboLabel,  barPct(ta.comboVal,  sc.combo_game), 'SIMPLE', 'TECHNICAL', 'avg ' + ta.comboVal)}
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">2026 TIER</div>
+          <div style="font-weight:800;font-size:13px;">${ta.tierShare}% Top 20</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">${ta.tierShareLabel}</div>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">GENDER MIX</div>
+          <div style="font-weight:800;font-size:13px;">♂${ta.gM} · ⚥${ta.gX} · ♀${ta.gF}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">fighters (out of 6)</div>
+        </div>
       </div>
-      <div style="margin-top:12px;padding-top:12px;border-top:1px dashed rgba(${dash},.22);font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">Most-played universe: <span style="color:#FFF;font-weight:700;">${ta.universe}</span> (${ta.universeShare} games)</div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px dashed rgba(${dash},.22);font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">Most-played character universe: <span style="color:#FFF;font-weight:700;">${ta.universe}</span> (${ta.universeShare} games)</div>
     </div>`;
   }
 
