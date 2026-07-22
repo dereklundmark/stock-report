@@ -4,6 +4,12 @@ function renderHome() {
   const D = window.SMASH_DATA;
   if (!D) return '<div style="padding:60px;text-align:center;color:#5C6470;">Loading…</div>';
   const T = D.totals;
+  const p1Name = D.p1Name || 'P1';
+  const p2Name = D.p2Name || 'P2';
+  const p1Color = D.p1Color || '#FF5246';
+  const p2Color = D.p2Color || '#1FA0E0';
+  const P1 = p1Name.toUpperCase();
+  const P2 = p2Name.toUpperCase();
   const dRanked = rankWinrate(D.dRoster);
   const eRanked = rankWinrate(D.eRoster);
   const dMain = dRanked[0] || {};
@@ -22,7 +28,9 @@ function renderHome() {
   );
   const dPct = T.games ? Math.round(T.dW / T.games * 1000) / 10 : 0;
   const ePct = T.games ? Math.round(T.eW / T.games * 1000) / 10 : 0;
-  const lead = T.eW - T.dW;
+  const leadAbs = Math.abs(T.dW - T.eW);
+  const leaderName = T.eW > T.dW ? P2 : T.dW > T.eW ? P1 : null;
+  const leadText = leaderName ? `${leaderName} LEADS · +${leadAbs} WINS` : 'TIED';
 
   return `
 <div style="position:relative;min-height:calc(100vh - 56px);background:radial-gradient(120% 90% at 8% 0%,rgba(190,34,26,.30),transparent 55%),radial-gradient(120% 90% at 92% 100%,rgba(10,90,151,.34),transparent 55%);display:flex;align-items:center;justify-content:center;padding:32px 16px;">
@@ -32,11 +40,11 @@ function renderHome() {
   <div style="position:relative;z-index:1;width:100%;max-width:1080px;">
     <div style="background:#0F1217;border-radius:30px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.55);color:#fff;">
 
-      <!-- DEREK -->
+      <!-- P1 -->
       <div style="position:relative;background:linear-gradient(125deg,#FB6256 0%,#E5342B 48%,#C5241B 100%);overflow:hidden;">
         <div style="padding:24px 26px;display:flex;align-items:center;justify-content:space-between;gap:14px;">
           <div style="display:flex;flex-direction:column;min-width:0;flex:1;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.24em;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,.3);">DEREK</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.24em;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,.3);">${P1}</div>
             <div style="font-weight:900;font-size:clamp(110px,19vw,280px);line-height:.78;letter-spacing:-.05em;text-shadow:0 6px 22px rgba(0,0,0,.38);margin-top:4px;">${T.dW}</div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em;opacity:.75;margin-top:14px;text-shadow:0 2px 6px rgba(0,0,0,.3);">${dPct}% WIN RATE</div>
           </div>
@@ -51,11 +59,11 @@ function renderHome() {
         </div>
       </div>
 
-      <!-- ELLIOT -->
+      <!-- P2 -->
       <div style="position:relative;background:linear-gradient(305deg,#2FA9E4 0%,#1488C8 48%,#0C6AAC 100%);overflow:hidden;">
         <div style="padding:24px 26px;display:flex;flex-direction:row-reverse;align-items:center;justify-content:space-between;gap:14px;">
           <div style="display:flex;flex-direction:column;align-items:flex-end;text-align:right;min-width:0;flex:1;">
-            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.24em;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,.3);">ELLIOT</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.24em;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,.3);">${P2}</div>
             <div style="font-weight:900;font-size:clamp(110px,19vw,280px);line-height:.78;letter-spacing:-.05em;text-shadow:0 6px 22px rgba(0,0,0,.38);margin-top:4px;">${T.eW}</div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.06em;opacity:.75;margin-top:14px;text-shadow:0 2px 6px rgba(0,0,0,.3);">${ePct}% WIN RATE</div>
           </div>
@@ -66,14 +74,14 @@ function renderHome() {
       <!-- WIN SHARE BAR -->
       <div style="padding:22px 24px 20px;">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;">
-          <span style="color:#FF5246;">DEREK ${dPct}%</span>
-          <span style="color:#1FA0E0;">${ePct}% ELLIOT</span>
+          <span style="color:#FF5246;">${P1} ${dPct}%</span>
+          <span style="color:#1FA0E0;">${ePct}% ${P2}</span>
         </div>
         <div style="display:flex;height:18px;border-radius:9px;overflow:hidden;box-shadow:0 0 20px rgba(31,160,224,.28);">
           <div style="width:${dPct}%;background:linear-gradient(90deg,#BE221A,#FF5246);"></div>
           <div style="flex:1;background:linear-gradient(90deg,#1FA0E0,#34E1FF);"></div>
         </div>
-        <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;font-weight:800;color:#1FA0E0;margin-top:12px;">ELLIOT LEADS · +${lead} WINS · ${T.games} GAMES LOGGED</div>
+        <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;font-weight:800;color:#1FA0E0;margin-top:12px;">${leadText} · ${T.games} GAMES LOGGED</div>
       </div>
 
       <!-- TALE OF THE TAPE -->

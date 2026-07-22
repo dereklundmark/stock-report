@@ -5,17 +5,21 @@ function renderBattlegrounds() {
   if (!D) return '<div style="padding:60px;text-align:center;color:#5C6470;">Loading…</div>';
 
   const v = D.venue;
+  const p1Name = D.p1Name || 'P1';
+  const p2Name = D.p2Name || 'P2';
+  const P1 = p1Name.toUpperCase();
+  const P2 = p2Name.toUpperCase();
   const ipD = Math.round(100 * v.person.d / v.person.n);
   const onD = Math.round(100 * v.online.d / v.online.n);
   const venues = [
-    { label:'IN-PERSON', n:v.person.n, d:v.person.d, e:v.person.e, dPct:ipD, ePct:100-ipD, note:"On the couch, Elliot's edge grows." },
+    { label:'IN-PERSON', n:v.person.n, d:v.person.d, e:v.person.e, dPct:ipD, ePct:100-ipD, note:`On the couch, ${p2Name}'s edge grows.` },
     { label:'ONLINE',    n:v.online.n, d:v.online.d, e:v.online.e, dPct:onD, ePct:100-onD, note:'Over the wire it tightens up.' }
   ];
 
   const pl = D.platforms;
   const platCards = [
-    { label:'PLATFORMS ON',  n:pl.on.n,  d:pl.on.d,  e:pl.on.e,  dPct:pl.on.dPct,  ePct:100-pl.on.dPct,  note:'Derek closes the gap with platforms.' },
-    { label:'PLATFORMS OFF', n:pl.off.n, d:pl.off.d, e:pl.off.e, dPct:pl.off.dPct, ePct:100-pl.off.dPct, note:"Flat stages suit Elliot's playstyle." }
+    { label:'PLATFORMS ON',  n:pl.on.n,  d:pl.on.d,  e:pl.on.e,  dPct:pl.on.dPct,  ePct:100-pl.on.dPct,  note:`${p1Name} closes the gap with platforms.` },
+    { label:'PLATFORMS OFF', n:pl.off.n, d:pl.off.d, e:pl.off.e, dPct:pl.off.dPct, ePct:100-pl.off.dPct, note:`Flat stages suit ${p2Name}'s playstyle.` }
   ];
 
   const dow = D.dayOfWeek || [];
@@ -23,7 +27,7 @@ function renderBattlegrounds() {
   if (dow.length) {
     const best  = dow.reduce((a, b) => b.dPct > a.dPct ? b : a);
     const worst = dow.reduce((a, b) => b.dPct < a.dPct ? b : a);
-    dowNote = `${best.day} is Derek's best day (${best.dPct}%). ${worst.day} is his worst (${worst.dPct}%). ${worst.day} is Elliot's stronghold (${100 - worst.dPct}%).`;
+    dowNote = `${best.day} is ${p1Name}'s best day (${best.dPct}%). ${worst.day} is ${p1Name}'s worst (${worst.dPct}%). ${worst.day} is ${p2Name}'s stronghold (${100 - worst.dPct}%).`;
   }
   const dayOfWeek = dow.map(d => ({ ...d, ePct: 100 - d.dPct }));
 
@@ -103,9 +107,9 @@ function renderBattlegrounds() {
     <div style="display:grid;grid-template-columns:40px 1fr;gap:12px;margin-bottom:6px;">
       <div></div>
       <div style="display:flex;justify-content:space-between;padding:0 2px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#FF5246;font-weight:700;">DEREK</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#FF5246;font-weight:700;">${P1}</div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;font-weight:700;">50%</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#1FA0E0;font-weight:700;">ELLIOT</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#1FA0E0;font-weight:700;">${P2}</div>
       </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;">
@@ -132,8 +136,8 @@ function renderBattlegrounds() {
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px;flex-wrap:wrap;gap:10px;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;">WINS BY MONTH</div>
       <div style="display:flex;gap:14px;font-family:'JetBrains Mono',monospace;font-size:10px;flex-wrap:wrap;">
-        <span style="color:#FF5246;">■ DEREK</span>
-        <span style="color:#1FA0E0;">■ ELLIOT</span>
+        <span style="color:#FF5246;">${`■ ${P1}`}</span>
+        <span style="color:#1FA0E0;">${`■ ${P2}`}</span>
         <span style="color:#4B9FD4;opacity:.7;">— ONLINE</span>
         <span style="color:#C8A44A;opacity:.7;">— IN-PERSON</span>
       </div>

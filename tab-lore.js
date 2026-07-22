@@ -89,7 +89,7 @@ function renderLore() {
     eMore: (T.eScr||0)-(T.dScr||0)
   };
   const lossRageNote = lr.eLossPct != null
-    ? `Loss rage: Elliot screams in ${lr.eLossPct}% of losses vs ${lr.dLossPct}% for Derek.`
+    ? `Loss rage: ${p2Name} screams in ${lr.eLossPct}% of losses vs ${lr.dLossPct}% for ${p1Name}.`
     : '';
   const maxScr = Math.max(...(D.dScreams||[]).map(s=>s.v), ...(D.eScreams||[]).map(s=>s.v), 1);
   const dScreams = (D.dScreams||[]).slice(0,8).map(s => ({...s, w:Math.round(s.v/maxScr*100)}));
@@ -104,14 +104,14 @@ function renderLore() {
 
   // ---- LOUDEST GAME ----
   const lgNote = lg.screams
-    ? `${Math.round(lg.screams/2)} screams each. E called Derek a f***ing bitch and D tried to slap him. Derek won.`
+    ? `${Math.round(lg.screams/2)} screams each in the loudest game on record.`
     : '';
 
   // ---- HALL OF SHAME ----
   const hallOfShame = (D.hallOfShame||[]).map(s => ({
     ...s,
     winnerCol:  s.won==='D' ? '#FF5246' : '#1FA0E0',
-    winnerName: s.won==='D' ? 'DEREK' : 'ELLIOT',
+    winnerName: s.won==='D' ? P1 : P2,
     dslug: toSlug(s.dc||''),
     eslug: toSlug(s.ec||'')
   }));
@@ -138,11 +138,11 @@ function renderLore() {
       <div style="font-size:13px;color:#9AA3AF;margin-bottom:18px;line-height:1.5;">Taking the first stock wins the game <span style="color:#EDF0F3;font-weight:700;">${fs.overallPct||'—'}%</span> of the time.</div>
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF5246;font-weight:700;">DEREK</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6470;">${fs.dTakes||0} times → ${fs.dWins||0} wins</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FF5246;font-weight:700;">${P1}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6470;">${fs.dTakes||0} times → ${fs.dWins||0} wins</span></div>
           <div style="background:rgba(255,255,255,.05);border-radius:6px;height:28px;overflow:hidden;position:relative;"><div style="width:${fs.dPct||0}%;height:100%;background:linear-gradient(90deg,#C5241B,#FB6256);border-radius:6px;"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding:0 10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;color:#fff;">${fs.dPct||0}% conversion</span></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#1FA0E0;font-weight:700;">ELLIOT</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6470;">${fs.eTakes||0} times → ${fs.eWins||0} wins</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#1FA0E0;font-weight:700;">${P2}</span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6470;">${fs.eTakes||0} times → ${fs.eWins||0} wins</span></div>
           <div style="background:rgba(255,255,255,.05);border-radius:6px;height:28px;overflow:hidden;position:relative;"><div style="width:${fs.ePct||0}%;height:100%;background:linear-gradient(90deg,#0C6AAC,#2FA9E4);border-radius:6px;"></div><div style="position:absolute;inset:0;display:flex;align-items:center;padding:0 10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;color:#fff;">${fs.ePct||0}% conversion</span></div></div>
         </div>
       </div>
@@ -187,8 +187,8 @@ function renderLore() {
 
     <!-- DEREK'S TYPE -->
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">DEREK &lt;3 SHIRTLESS EMO BOIS</div>
-      <div style="font-size:13px;color:#9AA3AF;margin-bottom:18px;line-height:1.5;">He wins when his character is brooding, shirtless, or both.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">${P1} &lt;3 SHIRTLESS EMO BOIS</div>
+      <div style="font-size:13px;color:#9AA3AF;margin-bottom:18px;line-height:1.5;">${p1Name} wins when the character is brooding, shirtless, or both.</div>
 
       <div style="background:#0F1217;border:1px solid rgba(255,82,70,.12);border-radius:10px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;">
         <image-slot id="shirtless-img" src="characters/shulk_shirtless.png" fit="contain" shape="rounded" radius="6" style="width:70px;height:70px;flex-shrink:0;filter:drop-shadow(0 3px 10px rgba(0,0,0,.6));"></image-slot>
@@ -199,7 +199,7 @@ function renderLore() {
             <div style="width:${shirtlessD.pct}%;background:linear-gradient(90deg,#BE221A,#FF5246);"></div>
             <div style="flex:1;background:rgba(255,255,255,.06);"></div>
           </div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;">${shirtlessD.w}W ${shirtlessD.l}L · ${shirtlessD.g}g · Elliot: ${shirtlessE.pct}% (${shirtlessEGapStr})</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;">${shirtlessD.w}W ${shirtlessD.l}L · ${shirtlessD.g}g · ${p2Name}: ${shirtlessE.pct}% (${shirtlessEGapStr})</div>
         </div>
         <div style="text-align:right;flex-shrink:0;">
           <div style="font-weight:900;font-size:38px;line-height:1;color:#FF5246;letter-spacing:-.02em;">${shirtlessD.pct}%</div>
@@ -216,7 +216,7 @@ function renderLore() {
             <div style="width:${emoD.pct}%;background:linear-gradient(90deg,#BE221A,#FF5246);"></div>
             <div style="flex:1;background:rgba(255,255,255,.06);"></div>
           </div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;">${emoD.w}W ${emoD.l}L · ${emoD.g}g · Elliot: ${emoE.pct}% (${emoEGapStr})</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;">${emoD.w}W ${emoD.l}L · ${emoD.g}g · ${p2Name}: ${emoE.pct}% (${emoEGapStr})</div>
         </div>
         <div style="text-align:right;flex-shrink:0;">
           <div style="font-weight:900;font-size:38px;line-height:1;color:#FF5246;letter-spacing:-.02em;">${emoD.pct}%</div>
@@ -224,13 +224,13 @@ function renderLore() {
         </div>
       </div>
 
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.7;">Both sit ${shirtlessDGapStr} and ${emoDGapStr} above Derek's average respectively. Elliot drops below his own average with shirtless characters (${shirtlessEGapStr}). Sephiroth is the apex: bare chest, silver hair, long coat, brooding villain. Derek is ${sephirothRecord} with him.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.7;">Both sit ${shirtlessDGapStr} and ${emoDGapStr} above ${p1Name}'s average respectively. ${p2Name} drops below average with shirtless characters (${shirtlessEGapStr}). Sephiroth is the apex: bare chest, silver hair, long coat, brooding villain. ${p1Name} is ${sephirothRecord} with him.</div>
     </div>
 
     <!-- ELLIOT'S TYPE -->
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">ELLIOT &lt;3 BIG BOIS</div>
-      <div style="font-size:13px;color:#9AA3AF;margin-bottom:14px;line-height:1.5;">Elliot likes them big. The bigger the character, the bigger the W.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">${P2} &lt;3 BIG BOIS</div>
+      <div style="font-size:13px;color:#9AA3AF;margin-bottom:14px;line-height:1.5;">${p2Name} likes them big. The bigger the character, the bigger the W.</div>
       <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:16px;">
         <div style="font-weight:900;font-size:54px;line-height:1;color:#1FA0E0;letter-spacing:-.03em;">${monsterE.pct}%</div>
         <div>
@@ -246,7 +246,7 @@ function renderLore() {
           <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;width:34px;text-align:right;">${m.pct}%</span>
         </div>`).join('')}
       </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.6;">Derek also does well with these characters (${monsterD.pct}%, ${monsterD.g}g) — but Elliot transforms into a different player entirely. The bigger and scarier, the better.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.6;">${p1Name} also does well with these characters (${monsterD.pct}%, ${monsterD.g}g) — but ${p2Name} transforms into a different player entirely. The bigger and scarier, the better.</div>
     </div>
   </div>
 
@@ -266,12 +266,12 @@ function renderLore() {
 
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">🩷 THE JIGGLYPUFF CURSE</div>
-      <div style="font-size:13px;color:#9AA3AF;margin-bottom:16px;line-height:1.5;">Elliot has played Jigglypuff <span style="color:#EDF0F3;font-weight:700;">${jp.games||0}</span> times.</div>
+      <div style="font-size:13px;color:#9AA3AF;margin-bottom:16px;line-height:1.5;">${p2Name} has played Jigglypuff <span style="color:#EDF0F3;font-weight:700;">${jp.games||0}</span> times.</div>
       <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
         <image-slot id="jp-char" src="characters/jigglypuff.png" fit="contain" shape="circle" style="width:64px;height:64px;background:rgba(255,160,180,.15);" placeholder="Jigglypuff"></image-slot>
         <div>
           <div style="font-weight:900;font-size:28px;line-height:1;color:#EDF0F3;letter-spacing:-.02em;">${jp.games||0} games played</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,160,180,.8);margin-top:5px;font-weight:700;">BY ELLIOT · ${jigglyScreams} COMBINED SCREAMS</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,160,180,.8);margin-top:5px;font-weight:700;">${`BY ${P2} ·`} ${jigglyScreams} COMBINED SCREAMS</div>
         </div>
       </div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;">${jigglyNote}</div>
@@ -287,19 +287,19 @@ function renderLore() {
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
         <div style="background:rgba(255,82,70,.08);border:2px solid rgba(255,82,70,.3);border-radius:10px;padding:14px;text-align:center;box-shadow:0 0 14px rgba(255,82,70,.1) inset;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#FF5246;margin-bottom:5px;">DEREK</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:${p1Color};margin-bottom:5px;">${P1}</div>
           <div style="font-weight:900;font-size:36px;line-height:1;color:#FF5246;letter-spacing:-.02em;">${ptD.pct||0}%</div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#FF5246;margin-top:5px;">${ptD.w||0}–${ptD.l||0}</div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;margin-top:3px;">${ptD.g||0} games</div>
         </div>
         <div style="background:rgba(31,160,224,.06);border:1px solid rgba(31,160,224,.16);border-radius:10px;padding:14px;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#1FA0E0;margin-bottom:5px;">ELLIOT</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:${p2Color};margin-bottom:5px;">${P2}</div>
           <div style="font-weight:900;font-size:36px;line-height:1;color:#1FA0E0;letter-spacing:-.02em;">${ptE.pct||0}%</div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#1FA0E0;margin-top:5px;">${ptE.w||0}–${ptE.l||0}</div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;margin-top:3px;">${ptE.g||0} games</div>
         </div>
       </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.6;">Derek has played Pokémon Trainer ${ptD.g||0} times and won just ${ptD.w||0}. Elliot plays the same character at ${ptE.pct||0}% — a ${ptGap}-point gap, the largest on any shared character in ${T.games} games.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.6;">${p1Name} has played Pokémon Trainer ${ptD.g||0} times and won just ${ptD.w||0}. ${p2Name} plays the same character at ${ptE.pct||0}% — a ${ptGap}-point gap, the largest on any shared character in ${T.games} games.</div>
     </div>
   </div>
 
@@ -308,11 +308,11 @@ function renderLore() {
     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:16px;">SCREAM INDEX</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
       <div style="text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:#FF5246;margin-bottom:4px;">DEREK</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:${p1Color};margin-bottom:4px;">${P1}</div>
         <div style="font-weight:900;font-size:52px;line-height:1;color:#FF5246;letter-spacing:-.03em;">${T.dScr||0}</div>
       </div>
       <div style="text-align:center;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:#1FA0E0;margin-bottom:4px;">ELLIOT</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:${p2Color};margin-bottom:4px;">${P2}</div>
         <div style="font-weight:900;font-size:52px;line-height:1;color:#1FA0E0;letter-spacing:-.03em;">${T.eScr||0}</div>
       </div>
     </div>
@@ -320,20 +320,20 @@ function renderLore() {
       <div style="width:${screamSplit.dPct}%;background:linear-gradient(90deg,#BE221A,#FF5246);display:flex;align-items:center;padding-left:8px;"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;color:#fff;">${screamSplit.dPct}%</span></div>
       <div style="flex:1;background:linear-gradient(90deg,#1FA0E0,#34E1FF);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;color:#fff;">${screamSplit.ePct}%</span></div>
     </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.6;margin-bottom:22px;">Elliot screams <span style="color:#1FA0E0;font-weight:800;">${screamSplit.multiplier}×</span> more — ${screamSplit.eMore} extra screams across ${T.games} games. ${lossRageNote}</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.6;margin-bottom:22px;">${p2Name} screams <span style="color:${p2Color};font-weight:800;">${screamSplit.multiplier}×</span> more — ${screamSplit.eMore} extra screams across ${T.games} games. ${lossRageNote}</div>
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;">BY CHARACTER</div>
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3AF;">${T.dScr||0} vs ${T.eScr||0} total</div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#FF5246;font-weight:700;margin-bottom:14px;">DEREK · screams by character</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#FF5246;font-weight:700;margin-bottom:14px;">${P1} · screams by character</div>
         <div style="display:flex;flex-direction:column;gap:10px;">
           ${dScreams.map(s => screamRow(s,'#FF5246')).join('')}
         </div>
       </div>
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:14px;">ELLIOT · screams by character</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:14px;">${P2} · screams by character</div>
         <div style="display:flex;flex-direction:column;gap:10px;">
           ${eScreams.map(s => screamRow(s,'#1FA0E0')).join('')}
         </div>

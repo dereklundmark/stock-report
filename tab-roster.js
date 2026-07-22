@@ -4,6 +4,13 @@ function renderRoster() {
   const D = window.SMASH_DATA;
   if (!D) return '<div style="padding:60px;text-align:center;color:#5C6470;">Loading…</div>';
 
+  const p1Name = D.p1Name || 'P1';
+  const p2Name = D.p2Name || 'P2';
+  const p1Color = D.p1Color || '#FF5246';
+  const p2Color = D.p2Color || '#1FA0E0';
+  const P1 = p1Name.toUpperCase();
+  const P2 = p2Name.toUpperCase();
+
   const raw = S.rosterTab === 'd' ? D.dRoster : D.eRoster;
   const search = (S.rosterSearch || '').toLowerCase();
   const filtered = search
@@ -43,7 +50,7 @@ function renderRoster() {
 <div style="padding:9px 16px 9px 4px;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;background:${rowbg};"><span style="height:6px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;display:block;flex:1;"><span style="display:block;height:100%;width:${gbar}%;background:${playerColor};opacity:.85;"></span></span></div>`;
   }).join('');
 
-  const tabBtns = [['d','DEREK','#FF5246'],['e','ELLIOT','#1FA0E0']].map(([id, label, col]) => {
+  const tabBtns = [['d', P1, p1Color],['e', P2, p2Color]].map(([id, label, col]) => {
     const active = S.rosterTab === id;
     return `<div onclick="setRosterTab('${id}')" style="padding:8px 18px;border-radius:7px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.1em;cursor:pointer;background:${active?col:'transparent'};color:${active?'#fff':'#9AA3AF'};">${label}</div>`;
   }).join('');

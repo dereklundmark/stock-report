@@ -4,6 +4,13 @@ function renderTeamSheet() {
   const D = window.SMASH_DATA;
   if (!D) return '<div style="padding:60px;text-align:center;color:#5C6470;">Loading…</div>';
 
+  const p1Name = D.p1Name || 'P1';
+  const p2Name = D.p2Name || 'P2';
+  const p1Color = D.p1Color || '#FF5246';
+  const p2Color = D.p2Color || '#1FA0E0';
+  const P1 = p1Name.toUpperCase();
+  const P2 = p2Name.toUpperCase();
+
   const dRanked = rankWinrate(D.dRoster);
   const eRanked = rankWinrate(D.eRoster);
   const dTop6Raw = dRanked.slice(0, 6);
@@ -40,11 +47,11 @@ function renderTeamSheet() {
   const tierDiff = Math.abs(dTopTier - eTopTier);
   const tierNote = tierDiff <= 5
     ? `Both players pick from the 2026 Top 15 at roughly the same rate (${dTopTier}% vs ${eTopTier}%).`
-    : `${dTopTier > eTopTier ? 'Derek' : 'Elliot'} leans more heavily into 2026 Top 15 characters (${dTopTier}% vs ${eTopTier}%).`;
+    : `${dTopTier > eTopTier ? p1Name : p2Name} leans more heavily into 2026 Top 15 characters (${dTopTier}% vs ${eTopTier}%).`;
 
   const dG = genderSplit(dSlice), eG = genderSplit(eSlice);
   const genderNote = (dG.M > 60 && eG.M > 60)
-    ? `Both lean heavily male. ${eG.M < dG.M ? 'Elliot' : 'Derek'} mixes it up slightly more.`
+    ? `Both lean heavily male. ${eG.M < dG.M ? p2Name : p1Name} mixes it up slightly more.`
     : 'Both players run a diverse gender mix.';
 
   const dUniv = topUni(universeCounts(D.dRoster), 6);
@@ -58,8 +65,8 @@ function renderTeamSheet() {
   const matchups = (D.matchups || []).map(m => {
     const dShare = Math.round(100 * m.d / m.n);
     let verdict;
-    if (m.d > m.e) verdict = 'DEREK +' + (m.d - m.e);
-    else if (m.e > m.d) verdict = 'ELLIOT +' + (m.e - m.d);
+    if (m.d > m.e) verdict = `${P1} +` + (m.d - m.e);
+    else if (m.e > m.d) verdict = `${P2} +` + (m.e - m.d);
     else verdict = 'EVEN';
     return { ...m, dShare, verdict, dslug: toSlug(m.dc), eslug: toSlug(m.ec) };
   });
@@ -161,12 +168,12 @@ function renderTeamSheet() {
     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:18px;">TOP 6 CHARACTERS · BY WIN RATE (MIN 3 GAMES)</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#FF5246;font-weight:700;margin-bottom:12px;">DEREK</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#FF5246;font-weight:700;margin-bottom:12px;">${P1}</div>
         <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">${dTop6.map(c => charCard(c, '#FF5246')).join('')}</div>
         ${attrsPanel(dTA, '#FF5246')}
       </div>
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:12px;">ELLIOT</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:12px;">${P2}</div>
         <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">${eTop6.map(c => charCard(c, '#1FA0E0')).join('')}</div>
         ${attrsPanel(eTA, '#1FA0E0')}
       </div>
@@ -189,8 +196,8 @@ function renderTeamSheet() {
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;">STAT PROFILE</div>
       <div style="display:flex;gap:12px;font-family:'JetBrains Mono',monospace;font-size:10px;">
-        <span style="display:flex;align-items:center;gap:5px;color:#FF5246;"><span style="width:10px;height:3px;background:#FF5246;border-radius:2px;display:inline-block;"></span>DEREK</span>
-        <span style="display:flex;align-items:center;gap:5px;color:#1FA0E0;"><span style="width:10px;height:3px;background:#1FA0E0;border-radius:2px;display:inline-block;"></span>ELLIOT</span>
+        <span style="display:flex;align-items:center;gap:5px;color:#FF5246;"><span style="width:10px;height:3px;background:#FF5246;border-radius:2px;display:inline-block;"></span>${P1}</span>
+        <span style="display:flex;align-items:center;gap:5px;color:#1FA0E0;"><span style="width:10px;height:3px;background:#1FA0E0;border-radius:2px;display:inline-block;"></span>${P2}</span>
       </div>
     </div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;margin-bottom:20px;line-height:1.5;">${pmNote}</div>
@@ -223,11 +230,11 @@ function renderTeamSheet() {
       <div style="font-size:11px;color:#9AA3AF;margin-bottom:14px;line-height:1.4;">% of picks ranked in the 2026 Top 15</div>
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div>
-          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:5px;"><span style="color:#FF5246;font-weight:700;">DEREK</span><span style="color:#FF5246;font-weight:800;">${dTopTier}%</span></div>
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:5px;"><span style="color:#FF5246;font-weight:700;">${P1}</span><span style="color:#FF5246;font-weight:800;">${dTopTier}%</span></div>
           <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="width:${dTopTier}%;height:100%;background:linear-gradient(90deg,#BE221A,#FF5246);"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:5px;"><span style="color:#1FA0E0;font-weight:700;">ELLIOT</span><span style="color:#1FA0E0;font-weight:800;">${eTopTier}%</span></div>
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;margin-bottom:5px;"><span style="color:#1FA0E0;font-weight:700;">${P2}</span><span style="color:#1FA0E0;font-weight:800;">${eTopTier}%</span></div>
           <div style="height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;"><div style="width:${eTopTier}%;height:100%;background:linear-gradient(90deg,#0C6AAC,#1FA0E0);"></div></div>
         </div>
       </div>
@@ -237,11 +244,11 @@ function renderTeamSheet() {
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:14px;">GENDER OF PICKS · ${pmLabel}</div>
       <div style="display:flex;flex-direction:column;gap:14px;">
         <div>
-          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;margin-bottom:5px;"><span style="color:#FF5246;font-weight:700;">DEREK</span><span style="color:#9AA3AF;">♂${dG.M}% · ⚥${dG.X}% · ♀${dG.F}%</span></div>
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;margin-bottom:5px;"><span style="color:#FF5246;font-weight:700;">${P1}</span><span style="color:#9AA3AF;">♂${dG.M}% · ⚥${dG.X}% · ♀${dG.F}%</span></div>
           <div style="display:flex;height:18px;border-radius:4px;overflow:hidden;"><div style="width:${dG.M}%;background:#FF5246;"></div><div style="width:${dG.X}%;background:rgba(255,82,70,.55);"></div><div style="width:${dG.F}%;background:rgba(255,82,70,.28);"></div></div>
         </div>
         <div>
-          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;margin-bottom:5px;"><span style="color:#1FA0E0;font-weight:700;">ELLIOT</span><span style="color:#9AA3AF;">♂${eG.M}% · ⚥${eG.X}% · ♀${eG.F}%</span></div>
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;margin-bottom:5px;"><span style="color:#1FA0E0;font-weight:700;">${P2}</span><span style="color:#9AA3AF;">♂${eG.M}% · ⚥${eG.X}% · ♀${eG.F}%</span></div>
           <div style="display:flex;height:18px;border-radius:4px;overflow:hidden;"><div style="width:${eG.M}%;background:#1FA0E0;"></div><div style="width:${eG.X}%;background:rgba(31,160,224,.55);"></div><div style="width:${eG.F}%;background:rgba(31,160,224,.28);"></div></div>
         </div>
       </div>
@@ -254,13 +261,13 @@ function renderTeamSheet() {
     <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:18px;">PREFERRED CHARACTER UNIVERSE · ALL GAMES</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;">
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#FF5246;font-weight:700;margin-bottom:12px;">DEREK</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#FF5246;font-weight:700;margin-bottom:12px;">${P1}</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           ${dUniv.map(u => `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${u.u}</span><span style="height:6px;background:rgba(255,82,70,.18);border-radius:3px;flex:1;max-width:100px;overflow:hidden;"><span style="display:block;height:100%;width:${u.w}%;background:#FF5246;"></span></span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3AF;width:28px;text-align:right;">${u.n}</span></div>`).join('')}
         </div>
       </div>
       <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:12px;">ELLIOT</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:12px;">${P2}</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           ${eUniv.map(u => `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${u.u}</span><span style="height:6px;background:rgba(31,160,224,.18);border-radius:3px;flex:1;max-width:100px;overflow:hidden;"><span style="display:block;height:100%;width:${u.w}%;background:#1FA0E0;"></span></span><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9AA3AF;width:28px;text-align:right;">${u.n}</span></div>`).join('')}
         </div>
@@ -273,12 +280,12 @@ function renderTeamSheet() {
   <div style="background:#0F1217;border-radius:14px;padding:24px;margin-top:14px;border:1px solid rgba(255,255,255,.05);">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;flex-wrap:wrap;gap:8px;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;">RECURRING MATCHUPS</div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">DEREK's PICK vs ELLIOT's PICK · 2+ games</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;">${P1}'S PICK vs ${P2}'S PICK · 2+ games</div>
     </div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;margin-bottom:18px;line-height:1.5;">The fights you've had more than once. Updates as new games come in.</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;align-items:start;">
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#FF5246;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(255,82,70,.2);">DEREK LEADS</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#FF5246;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(255,82,70,.2);">${P1} LEADS</div>
         ${dMatchups.map(m => matchupCard(m, '#FF5246')).join('')}
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;">
@@ -286,7 +293,7 @@ function renderTeamSheet() {
         ${tMatchups.map(m => matchupCard(m, '#9AA3AF')).join('')}
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(31,160,224,.2);">ELLIOT LEADS</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(31,160,224,.2);">${P2} LEADS</div>
         ${eMatchups.map(m => matchupCard(m, '#1FA0E0')).join('')}
       </div>
     </div>
@@ -300,7 +307,7 @@ function renderTeamSheet() {
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;margin-bottom:18px;line-height:1.5;position:relative;">Both players sat at 1 stock — winner takes all.</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;position:relative;">
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#FF5246;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(255,82,70,.2);">DEREK WINS</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#FF5246;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(255,82,70,.2);">${P1} WINS</div>
         ${sdDerek.map((s, i) => `<div style="background:rgba(255,82,70,.04);border:1px solid rgba(255,82,70,.1);border-radius:10px;padding:14px;display:flex;align-items:center;gap:10px;">
           <image-slot id="sdd-${i}-d" src="characters/${toSlug(s.dc||'')}.png" fit="contain" shape="rounded" radius="6" style="width:48px;height:48px;flex-shrink:0;background:rgba(255,82,70,.12);" placeholder="${s.dc||''}"></image-slot>
           <div style="flex:1;min-width:0;text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;">${s.dc||''} vs ${s.ec||''}</div></div>
@@ -308,7 +315,7 @@ function renderTeamSheet() {
         </div>`).join('')}
       </div>
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(31,160,224,.2);">ELLIOT WINS</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;padding-bottom:6px;border-bottom:1px solid rgba(31,160,224,.2);">${P2} WINS</div>
         ${sdElliot.map((s, i) => `<div style="background:rgba(31,160,224,.04);border:1px solid rgba(31,160,224,.1);border-radius:10px;padding:14px;display:flex;align-items:center;gap:10px;">
           <image-slot id="sde-${i}-d" src="characters/${toSlug(s.dc||'')}.png" fit="contain" shape="rounded" radius="6" style="width:48px;height:48px;flex-shrink:0;background:rgba(255,82,70,.12);" placeholder="${s.dc||''}"></image-slot>
           <div style="flex:1;min-width:0;text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;">${s.dc||''} vs ${s.ec||''}</div></div>
