@@ -9,15 +9,24 @@ async function loadSmashData() {
   const sb = window._supabase;
 
   /* ── fetch both tables in parallel ───────────────────────── */
-  const [mRes, cRes] = await Promise.all([
-    sb.from('matches').select('*').eq('rivalry_id', 1).order('date', { ascending: true }),
-    sb.from('characters').select('*')
+  const [mRes, cRes, rRes] = await Promise.all([
+    sb.from('matches').select('*').eq('rivalry_id', 1).order('date', { ascending: true }).order('id', { ascending: true }),
+    sb.from('characters').select('*'),
+    sb.from('rivalries').select('name, p1:players!rivalries_p1_id_fkey(name, color), p2:players!rivalries_p2_id_fkey(name, color)').eq('id', 1).single()
   ]);
 
   if (mRes.error) { console.error('matches fetch:', mRes.error); return; }
   if (cRes.error) { console.error('characters fetch:', cRes.error); return; }
 
-  window.SMASH_DATA = compute(mRes.data || [], cRes.data || []);
+  const rivalry = rRes.data || {};
+  const rivalryInfo = {
+    p1Name:  (rivalry.p1?.name  || 'P1'),
+    p1Color: (rivalry.p1?.color || '#FF5246'),
+    p2Name:  (rivalry.p2?.name  || 'P2'),
+    p2Color: (rivalry.p2?.color || '#1FA0E0')
+  };
+
+  window.SMASH_DATA = compute(mRes.data || [], cRes.data || [], rivalryInfo);
 
   // Trigger a re-render if the app is already initialised
   if (typeof render === 'function' && window.SMASH_PREFS) render();
@@ -40,7 +49,8 @@ window._supabase
 /* ═══════════════════════════════════════════════════════════════
    COMPUTE
    ═══════════════════════════════════════════════════════════════ */
-function compute(raw, chars) {
+function compute(raw, chars, rivalryInfo) {
+  const { p1Name='P1', p1Color='#FF5246', p2Name='P2', p2Color='#1FA0E0' } = rivalryInfo || {};
 
   /* ── helpers ──────────────────────────────────────────────── */
   const slug = n =>
@@ -419,6 +429,7 @@ function compute(raw, chars) {
     hallOfShame, nearPerfect, lossRageScream,
     loudestGame, jigglypuffCurse, firstHitScream,
     dayOfWeek, masterChars,
-    shutout, closeGames, yearByYear, controllerThrows
+    shutout, closeGames, yearByYear, controllerThrows,
+    p1Name, p1Color, p2Name, p2Color
   };
 }

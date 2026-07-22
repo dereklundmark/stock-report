@@ -12,13 +12,10 @@ function renderLore() {
   const jp = D.jigglypuffCurse || {};
 
   // ---- DYNAMIC PLAYER NAMES ----
-  const activeDash = (window.S && window.S.dashboards && window.S.dashboards.length)
-    ? (window.S.dashboards.find(d => d.id === window.S.activeDashboard) || window.S.dashboards[0])
-    : { p1: 'P1', p2: 'P2', p1c: '#FF5246', p2c: '#1FA0E0' };
-  const p1Name = (activeDash.p1 || 'P1').toUpperCase();
-  const p2Name = (activeDash.p2 || 'P2').toUpperCase();
-  const p1Color = activeDash.p1c || '#FF5246';
-  const p2Color = activeDash.p2c || '#1FA0E0';
+  const p1Name  = (D.p1Name  || 'P1').toUpperCase();
+  const p2Name  = (D.p2Name  || 'P2').toUpperCase();
+  const p1Color = D.p1Color  || '#FF5246';
+  const p2Color = D.p2Color  || '#1FA0E0';
 
   // ---- FIRST STOCK ----
   const _fsDiff = Math.abs((fs.ePct||0) - (fs.dPct||0));
@@ -153,7 +150,7 @@ function renderLore() {
     </div>
 
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">💀 CONTROLLER THROWS</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">CONTROLLER THROWS</div>
       <div style="font-size:13px;color:#9AA3AF;margin-bottom:20px;line-height:1.5;">Who is the bigger rage quitter?</div>
       ${(D.controllerThrows && D.controllerThrows.total > 0) ? `
       <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-bottom:20px;">
