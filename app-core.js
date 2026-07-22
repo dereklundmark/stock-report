@@ -30,11 +30,11 @@ const S = {
   createInviteEmail: '',
   createError: '',
   dashboards: [
-    { id: 'derek-elliot', name: 'Derek vs Elliot', p1: 'Derek', p2: 'Elliot', p1c: '#FF5246', p2c: '#1FA0E0', games: 171 }
+    { id: 'default', name: 'P1 vs P2', p1: 'P1', p2: 'P2', p1c: '#FF5246', p2c: '#1FA0E0', games: 0 }
   ],
   activeDashboard: null,
   sessionVenue: 'online',
-  sessionStep: 0,   // 0/1 = pick Derek, 2 = pick Elliot, 3 = stats form
+  sessionStep: 0,   // 0/1 = pick P1 character, 2 = pick P2 character, 3 = stats form
   currentMatch: {
     dc: '', ec: '', dcSlug: '', ecSlug: '',
     outcome: '', platform: 'Y',
@@ -365,8 +365,8 @@ function goPickD() {
 }
 
 // Match stats
-function setDerekWin()  { Object.assign(S.currentMatch, { outcome: 'D', dKills: 5 }); render(); }
-function setElliotWin() { Object.assign(S.currentMatch, { outcome: 'E', eKills: 5 }); render(); }
+function setP1Win() { Object.assign(S.currentMatch, { outcome: 'D', dKills: 5 }); render(); }
+function setP2Win() { Object.assign(S.currentMatch, { outcome: 'E', eKills: 5 }); render(); }
 function dKillMinus() { S.currentMatch.dKills = Math.max(0, (S.currentMatch.dKills||0) - 1); render(); }
 function dKillPlus()  { S.currentMatch.dKills = Math.min(5, (S.currentMatch.dKills||0) + 1); render(); }
 function eKillMinus() { S.currentMatch.eKills = Math.max(0, (S.currentMatch.eKills||0) - 1); render(); }

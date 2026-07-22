@@ -27,8 +27,8 @@ function renderSession() {
 
   const activeDash = S.dashboards.find(d => d.id === S.activeDashboard) || S.dashboards[0] || {};
   const activeDashName = activeDash.name || 'Game Night';
-  const p1Name = (activeDash.p1 || 'Derek').toUpperCase();
-  const p2Name = (activeDash.p2 || 'Elliot').toUpperCase();
+  const p1Name = (activeDash.p1 || 'P1').toUpperCase();
+  const p2Name = (activeDash.p2 || 'P2').toUpperCase();
 
   const isLogin   = S.sessionScreen === 'login';
   const isSelect  = S.sessionScreen === 'select';
@@ -208,8 +208,8 @@ function renderSession() {
         <!-- WHO WON -->
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#5C6470;margin-bottom:8px;">WHO WON?</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;">
-          <div onclick="setDerekWin()" style="padding:14px;border-radius:10px;background:${dWinBg};border:${dWinBorder};text-align:center;cursor:pointer;font-weight:900;font-size:16px;color:#FF5246;letter-spacing:.04em;">${p1Name}</div>
-          <div onclick="setElliotWin()" style="padding:14px;border-radius:10px;background:${eWinBg};border:${eWinBorder};text-align:center;cursor:pointer;font-weight:900;font-size:16px;color:#1FA0E0;letter-spacing:.04em;">${p2Name}</div>
+          <div onclick="setP1Win()" style="padding:14px;border-radius:10px;background:${dWinBg};border:${dWinBorder};text-align:center;cursor:pointer;font-weight:900;font-size:16px;color:#FF5246;letter-spacing:.04em;">${p1Name}</div>
+          <div onclick="setP2Win()" style="padding:14px;border-radius:10px;background:${eWinBg};border:${eWinBorder};text-align:center;cursor:pointer;font-weight:900;font-size:16px;color:#1FA0E0;letter-spacing:.04em;">${p2Name}</div>
         </div>
 
         <!-- KILLS -->
