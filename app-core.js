@@ -49,6 +49,8 @@ const S = {
 try {
   const t = localStorage.getItem('smash_tab');
   if (t && ['home','prefs','battlegrounds','lore','roster'].includes(t)) S.tab = t;
+  const sm = localStorage.getItem('smash_session_matches');
+  if (sm) S.sessionMatches = JSON.parse(sm);
 } catch(e) {}
 
 
@@ -216,7 +218,7 @@ function renderNav() {
   }</div>` : '';
 
   return `<div style="max-width:960px;margin:0 auto;padding:0 14px;display:flex;align-items:stretch;justify-content:space-between;min-height:52px;">
-    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;padding:14px 0;">
+    <div onclick="setTab('home')" style="display:flex;align-items:center;gap:8px;flex-shrink:0;padding:14px 0;cursor:pointer;">
       <span style="font-weight:900;font-size:13px;color:#FF5246;letter-spacing:.04em;">STOCK</span>
       <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;color:#5C6470;">✦</span>
       <span style="font-weight:900;font-size:13px;color:#1FA0E0;letter-spacing:.04em;">REPORT</span>
@@ -243,40 +245,6 @@ function setTab(tab) {
   render();
 }
 function toggleNav() { S.showNav = !S.showNav; render(); }
-async function loadRecentMatches(rivalryId) {
-  const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
-  const normChar = n => (n || '')
-    .replace(/\bPokemon\b/g, 'Pokémon')
-    .replace(/Mr\. Game and Watch/gi, 'Mr. Game & Watch');
-  const { data, error } = await window._supabase
-    .from('matches')
-    .select('*')
-    .eq('rivalry_id', rivalryId)
-    .gte('created_at', cutoff)
-    .order('created_at', { ascending: true });
-  if (error) { console.error('loadRecentMatches error:', error); return; }
-  S.sessionMatches = (data || []).map(m => ({
-    dc:      normChar(m.p1_char),
-    ec:      normChar(m.p2_char),
-    dcSlug:  toSlug(normChar(m.p1_char)),
-    ecSlug:  toSlug(normChar(m.p2_char)),
-    outcome: m.winner === 'p1' ? 'D' : 'E',
-    dKills:  m.p1_kills  || 0,
-    eKills:  m.p2_kills  || 0,
-    dScr:    m.p1_screams || 0,
-    eScr:    m.p2_screams || 0,
-    fh:      m.first_hit   === 'p1' ? 'D' : m.first_hit   === 'p2' ? 'E' : '',
-    fs:      m.first_stock === 'p1' ? 'D' : m.first_stock === 'p2' ? 'E' : '',
-    platform: m.platforms    ? 'Y' : 'N',
-    sd:       m.sudden_death ? 'Y' : 'N',
-    note:    m.notes || '',
-    venue:   m.venue === 'Online' ? 'online' : 'person',
-    date:    (m.date || '').slice(0, 10),
-    supabaseId: m.id
-  }));
-  render();
-}
-
 function openSession() {
   Object.assign(S, { showSession: true, sessionScreen: S.isLoggedIn ? 'select' : 'login' });
   render();
@@ -336,13 +304,11 @@ async function submitLogin() {
     p2c:   (playerMap[rv.p2_id] || {}).color || '#1FA0E0',
     games: mcMap[rv.id] || 0
   }));
-  const activeDashId = dashboards.length === 1 ? dashboards[0].id : null;
   Object.assign(S, { isLoggedIn: true, loginLoading: false, loginError: '',
     isAdmin, dashboards,
     sessionScreen: dashboards.length === 1 ? 'session' : 'select',
-    activeDashboard: activeDashId });
+    activeDashboard: dashboards.length === 1 ? dashboards[0].id : null });
   render();
-  if (activeDashId) loadRecentMatches(activeDashId);
 }
 function submitLoginOnEnter(e) { if (e.key === 'Enter') submitLogin(); }
 async function logout() {
@@ -352,11 +318,7 @@ async function logout() {
 }
 
 // Dashboard
-function selectDashboard(id) {
-  Object.assign(S, { activeDashboard: id, sessionScreen: 'session' });
-  render();
-  loadRecentMatches(id);
-}
+function selectDashboard(id) { Object.assign(S, { activeDashboard: id, sessionScreen: 'session' }); render(); }
 function goCreateDashboard() { S.sessionScreen = 'create'; render(); }
 function goBackToSelect() { S.sessionScreen = S.dashboards.length > 1 ? 'select' : 'session'; render(); }
 function setCreateP1(val) { S.createP1 = val; render(); }
@@ -403,8 +365,8 @@ function goPickD() {
 }
 
 // Match stats
-function setDerekWin() { S.currentMatch.outcome = 'D'; render(); }
-function setElliotWin() { S.currentMatch.outcome = 'E'; render(); }
+function setDerekWin()  { Object.assign(S.currentMatch, { outcome: 'D', dKills: 5 }); render(); }
+function setElliotWin() { Object.assign(S.currentMatch, { outcome: 'E', eKills: 5 }); render(); }
 function dKillMinus() { S.currentMatch.dKills = Math.max(0, (S.currentMatch.dKills||0) - 1); render(); }
 function dKillPlus()  { S.currentMatch.dKills = Math.min(5, (S.currentMatch.dKills||0) + 1); render(); }
 function eKillMinus() { S.currentMatch.eKills = Math.max(0, (S.currentMatch.eKills||0) - 1); render(); }
@@ -427,63 +389,52 @@ async function logMatch() {
   const today = new Date().toISOString().slice(0, 10);
   const rivalryId = typeof S.activeDashboard === 'number' ? S.activeDashboard : 1;
   const row = {
-    rivalry_id:   rivalryId,
-    date:         today,
-    p1_char:      cm.dc,
-    p1_kills:     cm.dKills || 0,
-    p1_screams:   cm.dScr   || 0,
-    p2_char:      cm.ec,
-    p2_kills:     cm.eKills || 0,
-    p2_screams:   cm.eScr   || 0,
-    winner:       cm.outcome === 'D' ? 'p1' : 'p2',
-    first_hit:    cm.fh === 'D' ? 'p1' : cm.fh === 'E' ? 'p2' : null,
-    first_stock:  cm.fs === 'D' ? 'p1' : cm.fs === 'E' ? 'p2' : null,
-    platforms:    cm.platform === 'Y',
+    rivalry_id:  rivalryId,
+    date:        today,
+    p1_char:     cm.dc,
+    p1_kills:    cm.dKills || 0,
+    p1_screams:  cm.dScr   || 0,
+    p2_char:     cm.ec,
+    p2_kills:    cm.eKills || 0,
+    p2_screams:  cm.eScr   || 0,
+    winner:      cm.outcome === 'D' ? 'p1' : 'p2',
+    first_hit:   cm.fh === 'D' ? 'p1' : cm.fh === 'E' ? 'p2' : null,
+    first_stock: cm.fs === 'D' ? 'p1' : cm.fs === 'E' ? 'p2' : null,
+    platforms:   cm.platform === 'Y',
     sudden_death: cm.sd === 'Y',
-    venue:        S.sessionVenue === 'online' ? 'Online' : 'In-Person',
-    notes:        cm.note || null
+    venue:       S.sessionVenue === 'online' ? 'Online' : 'In-Person',
+    notes:       cm.note || null
   };
+  // Write to Supabase
+  const { error } = await window._supabase.from('matches').insert([row]);
+  if (error) { console.error('logMatch insert error:', error); }
 
-  let supabaseId = cm.supabaseId || null;
-
-  if (supabaseId) {
-    // Editing an existing match — UPDATE the existing row
-    const { error } = await window._supabase.from('matches').update(row).eq('id', supabaseId);
-    if (error) { console.error('logMatch update error:', error); supabaseId = null; }
-  } else {
-    // New match — INSERT and capture the returned id
-    const { data, error } = await window._supabase.from('matches').insert([row]).select('id');
-    if (error) { console.error('logMatch insert error:', error); }
-    else if (data && data[0]) { supabaseId = data[0].id; }
-  }
-
-  const match = { ...cm, venue: S.sessionVenue, date: today, supabaseId };
+  const match = { ...cm, venue: S.sessionVenue, date: today };
   const nm = [...S.sessionMatches, match];
   S.sessionMatches = nm;
-  Object.assign(S.currentMatch, { dc:'',ec:'',dcSlug:'',ecSlug:'',outcome:'',dKills:0,eKills:0,dScr:0,eScr:0,fh:'',fs:'',sd:'N',note:'',supabaseId:null });
+  Object.assign(S.currentMatch, { dc:'',ec:'',dcSlug:'',ecSlug:'',outcome:'',dKills:0,eKills:0,dScr:0,eScr:0,fh:'',fs:'',sd:'N',note:'' });
   S.sessionStep = 1;
+  try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
 }
-async function deleteMatch(i) {
-  const m = S.sessionMatches[i];
-  if (m && m.supabaseId) {
-    const { error } = await window._supabase.from('matches').delete().eq('id', m.supabaseId);
-    if (error) { console.error('deleteMatch error:', error); }
-  }
+function deleteMatch(i) {
   const nm = S.sessionMatches.filter((_, idx) => idx !== i);
   S.sessionMatches = nm;
+  try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
 }
 function editMatch(i) {
   const m = S.sessionMatches[i];
   const nm = S.sessionMatches.filter((_, idx) => idx !== i);
   S.sessionMatches = nm;
-  Object.assign(S.currentMatch, { ...m, supabaseId: m.supabaseId || null });
+  Object.assign(S.currentMatch, { ...m });
   S.sessionStep = 3;
+  try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
 }
 function clearSession() {
   S.sessionMatches = []; S.sessionStep = 0;
+  try { localStorage.removeItem('smash_session_matches'); } catch(e) {}
   render();
 }
 

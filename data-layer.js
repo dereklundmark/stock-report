@@ -201,10 +201,15 @@ function compute(raw, chars) {
   /* ── monthly ──────────────────────────────────────────────── */
   const monthMap = {};
   for (const m of ms) {
-    if (!monthMap[m.month]) monthMap[m.month] = { m: m.month, d: 0, e: 0, venue: m.venue || 'online' };
+    if (!monthMap[m.month]) monthMap[m.month] = { m: m.month, d: 0, e: 0, online: 0, person: 0 };
     m.dWin ? monthMap[m.month].d++ : monthMap[m.month].e++;
+    (m.venue || '').toLowerCase() === 'online'
+      ? monthMap[m.month].online++
+      : monthMap[m.month].person++;
   }
-  const monthly = Object.values(monthMap).sort((a, b) => a.m.localeCompare(b.m));
+  const monthly = Object.values(monthMap)
+    .sort((a, b) => a.m.localeCompare(b.m))
+    .map(m => ({ ...m, venue: m.online >= m.person ? 'online' : 'person' }));
 
   /* ── matchups (repeated character pairs) ─────────────────── */
   const muMap = {};
