@@ -10,7 +10,7 @@ async function loadSmashData() {
 
   /* ── fetch both tables in parallel ───────────────────────── */
   const [mRes, cRes] = await Promise.all([
-    sb.from('matches').select('*').eq('rivalry_id', 1).order('date', { ascending: true }),
+    sb.from('matches').select('*').eq('rivalry_id', 1).order('date', { ascending: true }).order('id', { ascending: true }),
     sb.from('characters').select('*')
   ]);
 
