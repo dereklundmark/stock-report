@@ -139,7 +139,7 @@ function renderBattlegrounds() {
       </div>
     </div>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px;">
-      <div style="display:grid;grid-template-columns:repeat(${monthly.length},minmax(48px,1fr));gap:8px;align-items:end;height:200px;min-width:480px;">
+      <div style="display:grid;grid-template-columns:repeat(${monthly.length},minmax(48px,1fr));gap:8px;align-items:end;height:260px;min-width:480px;">
         ${monthly.map(m => `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
           <div style="display:flex;gap:3px;align-items:flex-end;height:140px;background:${m.venueBg};border-radius:4px;padding:0 3px;">
             <div style="width:11px;height:${m.dh}px;background:linear-gradient(#FB6256,#C5241B);border-radius:2px 2px 0 0;"></div>
