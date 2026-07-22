@@ -118,10 +118,10 @@ function renderTeamSheet() {
     return `<div style="margin-top:16px;padding:14px;background:rgba(${rgba},.06);border:1px solid rgba(${rgba},.18);border-radius:10px;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.18em;color:${col};font-weight:700;margin-bottom:10px;">TEAM TRAITS</div>
       <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px;">
-        ${trait('WEIGHT',     ta.weightLabel, barPct(ta.weightVal, sc.weight),     'LIGHT',  'HEAVY',     'avg ' + ta.weightVal)}
-        ${trait('SPEED',      ta.speedLabel,  barPct(ta.speedVal,  sc.speed),      'SLOW',   'FAST',      'avg ' + ta.speedVal + '/9')}
-        ${trait('KILL POWER', ta.powerLabel,  barPct(ta.powerVal,  sc.killpower),  'SOFT',   'CRUSHING',  'avg ' + ta.powerVal)}
-        ${trait('COMBO GAME', ta.comboLabel,  barPct(ta.comboVal,  sc.combo_game), 'SIMPLE', 'TECHNICAL', 'avg ' + ta.comboVal)}
+        ${trait('WEIGHT',     ta.weightLabel, barPct(ta.weightVal, sc.weight),     'LIGHT',  'HEAVY',     Math.round(barPct(ta.weightVal, sc.weight)) + '%')}
+        ${trait('SPEED',      ta.speedLabel,  barPct(ta.speedVal,  sc.speed),      'SLOW',   'FAST',      Math.round(barPct(ta.speedVal, sc.speed)) + '%')}
+        ${trait('KILL POWER', ta.powerLabel,  barPct(ta.powerVal,  sc.killpower),  'SOFT',   'CRUSHING',  Math.round(barPct(ta.powerVal, sc.killpower)) + '%')}
+        ${trait('COMBO GAME', ta.comboLabel,  barPct(ta.comboVal,  sc.combo_game), 'SIMPLE', 'TECHNICAL', Math.round(barPct(ta.comboVal, sc.combo_game)) + '%')}
         <div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#7C8694;">2026 TIER</div>
           <div style="font-weight:800;font-size:13px;">${ta.tierShare}% Top 20</div>
