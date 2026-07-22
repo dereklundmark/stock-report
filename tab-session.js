@@ -255,16 +255,6 @@ function renderSession() {
         <!-- TOGGLES -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
           <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">PLATFORM</div>
-            <div onclick="togglePlatform()" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;">${cm.platform==='Y' ? 'ON ✓' : 'OFF'}</div>
-          </div>
-          <div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">SUDDEN DEATH</div>
-            <div onclick="toggleSD()" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;">${cm.sd==='Y' ? 'YES ⚡' : 'NO'}</div>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
-          <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">1ST HIT</div>
             <div style="display:flex;gap:4px;">
               <div onclick="setFHD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fhDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">D</div>
@@ -277,6 +267,16 @@ function renderSession() {
               <div onclick="setFSD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">D</div>
               <div onclick="setFSE()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsEActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;">E</div>
             </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">PLATFORM</div>
+            <div onclick="togglePlatform()" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;">${cm.platform==='Y' ? 'ON ✓' : 'OFF'}</div>
+          </div>
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">SUDDEN DEATH</div>
+            <div onclick="toggleSD()" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;">${cm.sd==='Y' ? 'YES ⚡' : 'NO'}</div>
           </div>
         </div>
 
