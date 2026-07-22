@@ -11,9 +11,18 @@ function renderLore() {
   const lg = D.loudestGame || {};
   const jp = D.jigglypuffCurse || {};
 
+  // ---- DYNAMIC PLAYER NAMES ----
+  const activeDash = (window.S && window.S.dashboards && window.S.dashboards.length)
+    ? (window.S.dashboards.find(d => d.id === window.S.activeDashboard) || window.S.dashboards[0])
+    : { p1: 'P1', p2: 'P2', p1c: '#FF5246', p2c: '#1FA0E0' };
+  const p1Name = (activeDash.p1 || 'P1').toUpperCase();
+  const p2Name = (activeDash.p2 || 'P2').toUpperCase();
+  const p1Color = activeDash.p1c || '#FF5246';
+  const p2Color = activeDash.p2c || '#1FA0E0';
+
   // ---- FIRST STOCK ----
   const _fsDiff = Math.abs((fs.ePct||0) - (fs.dPct||0));
-  const _fsLeader = (fs.ePct||0) > (fs.dPct||0) ? 'Elliot' : (fs.dPct||0) > (fs.ePct||0) ? 'Derek' : 'Both';
+  const _fsLeader = (fs.ePct||0) > (fs.dPct||0) ? p2Name : (fs.dPct||0) > (fs.ePct||0) ? p1Name : 'Both';
   const firstStockNote = fs.ePct
     ? (_fsDiff >= 5
         ? `${_fsLeader} converts first stocks into wins at a significantly higher rate (+${_fsDiff}%).`
@@ -144,34 +153,35 @@ function renderLore() {
     </div>
 
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">HIGH PEAKS · LOW VALLEYS</div>
-      <div style="font-size:13px;color:#9AA3AF;margin-bottom:20px;line-height:1.5;">Derek stomps harder — but crumbles in close games.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
-        <div style="background:rgba(255,82,70,.05);border:1px solid rgba(255,82,70,.12);border-radius:10px;padding:16px;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#FF5246;margin-bottom:8px;">NEAR-PERFECT STOMPS (5-1)</div>
-          <div style="display:flex;align-items:flex-end;justify-content:center;gap:14px;">
-            <div>
-              <div style="font-weight:900;font-size:42px;line-height:1;color:#FF5246;letter-spacing:-.02em;">${shutout.d51||0}</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#FF5246;margin-top:4px;">DEREK</div>
-            </div>
-            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3C4450;padding-bottom:12px;">vs</div>
-            <div>
-              <div style="font-weight:900;font-size:42px;line-height:1;color:#5C6470;letter-spacing:-.02em;">${shutout.e51||0}</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;margin-top:4px;">ELLIOT</div>
-            </div>
-          </div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#FF5246;margin-top:10px;font-weight:700;">${nearPerfectRatio}× more often</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">💀 CONTROLLER THROWS</div>
+      <div style="font-size:13px;color:#9AA3AF;margin-bottom:20px;line-height:1.5;">Who is the bigger rage quitter?</div>
+      ${(D.controllerThrows && D.controllerThrows.total > 0) ? `
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-bottom:20px;">
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:${p1Color};margin-bottom:6px;">${p1Name}</div>
+          <div style="font-weight:900;font-size:64px;line-height:1;color:${p1Color};letter-spacing:-.03em;">${D.controllerThrows.p1}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;margin-top:6px;">1 per ${D.controllerThrows.p1 > 0 ? Math.round(T.games / D.controllerThrows.p1) : '—'} games</div>
         </div>
-        <div style="background:rgba(31,160,224,.05);border:1px solid rgba(31,160,224,.12);border-radius:10px;padding:16px;text-align:center;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:#1FA0E0;margin-bottom:8px;">CLOSE GAMES (5-4)</div>
-          <div style="font-weight:900;font-size:42px;line-height:1;color:#5C6470;letter-spacing:-.02em;">${cgDerekPct}%</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;margin-top:4px;">DEREK WIN RATE</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#1FA0E0;margin-top:10px;font-weight:700;">${cg.n} games · −${cgDrop} pts vs avg</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#3C4450;">vs</div>
+        <div style="text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:${p2Color};margin-bottom:6px;">${p2Name}</div>
+          <div style="font-weight:900;font-size:64px;line-height:1;color:${p2Color};letter-spacing:-.03em;">${D.controllerThrows.p2}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;margin-top:6px;">1 per ${D.controllerThrows.p2 > 0 ? Math.round(T.games / D.controllerThrows.p2) : '—'} games</div>
         </div>
       </div>
       <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:12px 16px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;line-height:1.6;">Derek delivers near-perfect stomps <span style="color:#FF5246;font-weight:800;">${nearPerfectRatio}×</span> more than Elliot — but when a game is close, he wins just <span style="color:#5C6470;font-weight:800;">${cgDerekPct}%</span> of the time. ${cgDrop} points below his average. He dominates or he crumbles. There is no middle ground.</div>
-      </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#9AA3AF;line-height:1.6;">
+          ${D.controllerThrows.p1 > D.controllerThrows.p2
+            ? `${p1Name} is the bigger rage quitter — <span style="color:${p1Color};font-weight:800;">${D.controllerThrows.p1}</span> throws to ${p2Name}'s <span style="color:${p2Color};font-weight:800;">${D.controllerThrows.p2}</span> across ${T.games} games. Controllers are not safe around ${p1Name}.`
+            : D.controllerThrows.p2 > D.controllerThrows.p1
+            ? `${p2Name} is the bigger rage quitter — <span style="color:${p2Color};font-weight:800;">${D.controllerThrows.p2}</span> throws to ${p1Name}'s <span style="color:${p1Color};font-weight:800;">${D.controllerThrows.p1}</span> across ${T.games} games. Controllers are not safe around ${p2Name}.`
+            : `Both players are equally guilty — <span style="font-weight:800;">${D.controllerThrows.p1}</span> throws each across ${T.games} games.`}
+        </div>
+      </div>` : `
+      <div style="background:rgba(255,255,255,.03);border-radius:8px;padding:24px 16px;text-align:center;">
+        <div style="font-size:32px;margin-bottom:10px;">🎮</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.7;">No controller throws logged yet.<br>Start tracking them in the Session form.</div>
+      </div>`}
     </div>
   </div>
 

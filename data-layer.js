@@ -10,7 +10,7 @@ async function loadSmashData() {
 
   /* ── fetch both tables in parallel ───────────────────────── */
   const [mRes, cRes] = await Promise.all([
-    sb.from('matches').select('*').eq('rivalry_id', 1).order('date', { ascending: true }).order('id', { ascending: true }),
+    sb.from('matches').select('*').eq('rivalry_id', 1).order('date', { ascending: true }),
     sb.from('characters').select('*')
   ]);
 
@@ -395,6 +395,17 @@ function compute(raw, chars) {
       ePct: y.n ? Math.round(y.e / y.n * 100) : 0
     }));
 
+  /* ── controller throws ───────────────────────────────────── */
+  const p1Throws = ms.reduce((s, m) => s + (m.p1_controller_throws || 0), 0);
+  const p2Throws = ms.reduce((s, m) => s + (m.p2_controller_throws || 0), 0);
+  const controllerThrows = {
+    p1: p1Throws,
+    p2: p2Throws,
+    total: p1Throws + p2Throws,
+    p1Rate: games > 0 ? (p1Throws / games).toFixed(2) : 0,
+    p2Rate: games > 0 ? (p2Throws / games).toFixed(2) : 0
+  };
+
   /* ── assemble ─────────────────────────────────────────────── */
   return {
     totals:     { games, dW, eW, dKills, eKills, dScr, eScr, nights, streak: { d: dStreak, e: eStreak }, span },
@@ -408,6 +419,6 @@ function compute(raw, chars) {
     hallOfShame, nearPerfect, lossRageScream,
     loudestGame, jigglypuffCurse, firstHitScream,
     dayOfWeek, masterChars,
-    shutout, closeGames, yearByYear
+    shutout, closeGames, yearByYear, controllerThrows
   };
 }
