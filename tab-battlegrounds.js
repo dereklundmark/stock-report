@@ -143,14 +143,14 @@ function renderBattlegrounds() {
       </div>
     </div>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px;">
-      <div style="display:grid;grid-template-columns:repeat(${monthly.length},minmax(48px,1fr));gap:8px;align-items:end;min-width:480px;padding-bottom:8px;">
+      <div style="display:grid;grid-template-columns:repeat(${monthly.length},minmax(48px,1fr));gap:8px;align-items:end;min-width:480px;padding-bottom:80px;">
         ${monthly.map(m => `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
           <div style="display:flex;gap:3px;align-items:flex-end;height:140px;background:${m.venueBg};border-radius:4px;padding:0 3px;">
             <div style="width:11px;height:${m.dh}px;background:linear-gradient(#FB6256,#C5241B);border-radius:2px 2px 0 0;"></div>
             <div style="width:11px;height:${m.eh}px;background:linear-gradient(#2FA9E4,#0C6AAC);border-radius:2px 2px 0 0;"></div>
           </div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;white-space:nowrap;writing-mode:vertical-rl;text-orientation:mixed;margin-top:2px;">${m.label}</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:${m.venueDot};white-space:nowrap;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.05em;">${m.venueLabel}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;white-space:nowrap;transform:rotate(-30deg);transform-origin:center;margin-top:4px;">${m.label}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:7px;color:${m.venueDot};white-space:nowrap;transform:rotate(-30deg);transform-origin:center;margin-top:10px;letter-spacing:.05em;">${m.venueLabel}</div>
         </div>`).join('')}
       </div>
     </div>
