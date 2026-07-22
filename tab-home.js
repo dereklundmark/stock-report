@@ -82,13 +82,13 @@ function renderHome() {
         <div style="display:flex;flex-direction:column;gap:13px;">
           <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;">
             <span style="font-weight:900;font-size:18px;color:#FF5246;text-align:right;">${T.streak.d}</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7C8694;text-align:center;">LONGEST STREAK</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7C8694;text-align:center;">MOST WINS IN A ROW</span>
             <span style="font-weight:900;font-size:18px;color:#1FA0E0;">${T.streak.e}</span>
           </div>
           <div style="height:1px;background:rgba(255,255,255,.07);"></div>
           <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;">
             <span style="font-weight:900;font-size:18px;color:#FF5246;text-align:right;">${T.nights.d}</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7C8694;text-align:center;">NIGHTS WON · ${T.nights.total}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:#7C8694;text-align:center;">GAME NIGHTS WON · ${T.nights.total}</span>
             <span style="font-weight:900;font-size:18px;color:#1FA0E0;">${T.nights.e}</span>
           </div>
           <div style="height:1px;background:rgba(255,255,255,.07);"></div>
