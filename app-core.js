@@ -389,35 +389,50 @@ async function logMatch() {
   const today = new Date().toISOString().slice(0, 10);
   const rivalryId = typeof S.activeDashboard === 'number' ? S.activeDashboard : 1;
   const row = {
-    rivalry_id:  rivalryId,
-    date:        today,
-    p1_char:     cm.dc,
-    p1_kills:    cm.dKills || 0,
-    p1_screams:  cm.dScr   || 0,
-    p2_char:     cm.ec,
-    p2_kills:    cm.eKills || 0,
-    p2_screams:  cm.eScr   || 0,
-    winner:      cm.outcome === 'D' ? 'p1' : 'p2',
-    first_hit:   cm.fh === 'D' ? 'p1' : cm.fh === 'E' ? 'p2' : null,
-    first_stock: cm.fs === 'D' ? 'p1' : cm.fs === 'E' ? 'p2' : null,
-    platforms:   cm.platform === 'Y',
+    rivalry_id:   rivalryId,
+    date:         today,
+    p1_char:      cm.dc,
+    p1_kills:     cm.dKills || 0,
+    p1_screams:   cm.dScr   || 0,
+    p2_char:      cm.ec,
+    p2_kills:     cm.eKills || 0,
+    p2_screams:   cm.eScr   || 0,
+    winner:       cm.outcome === 'D' ? 'p1' : 'p2',
+    first_hit:    cm.fh === 'D' ? 'p1' : cm.fh === 'E' ? 'p2' : null,
+    first_stock:  cm.fs === 'D' ? 'p1' : cm.fs === 'E' ? 'p2' : null,
+    platforms:    cm.platform === 'Y',
     sudden_death: cm.sd === 'Y',
-    venue:       S.sessionVenue === 'online' ? 'Online' : 'In-Person',
-    notes:       cm.note || null
+    venue:        S.sessionVenue === 'online' ? 'Online' : 'In-Person',
+    notes:        cm.note || null
   };
-  // Write to Supabase
-  const { error } = await window._supabase.from('matches').insert([row]);
-  if (error) { console.error('logMatch insert error:', error); }
 
-  const match = { ...cm, venue: S.sessionVenue, date: today };
+  let supabaseId = cm.supabaseId || null;
+
+  if (supabaseId) {
+    // Editing an existing match — UPDATE the existing row
+    const { error } = await window._supabase.from('matches').update(row).eq('id', supabaseId);
+    if (error) { console.error('logMatch update error:', error); supabaseId = null; }
+  } else {
+    // New match — INSERT and capture the returned id
+    const { data, error } = await window._supabase.from('matches').insert([row]).select('id');
+    if (error) { console.error('logMatch insert error:', error); }
+    else if (data && data[0]) { supabaseId = data[0].id; }
+  }
+
+  const match = { ...cm, venue: S.sessionVenue, date: today, supabaseId };
   const nm = [...S.sessionMatches, match];
   S.sessionMatches = nm;
-  Object.assign(S.currentMatch, { dc:'',ec:'',dcSlug:'',ecSlug:'',outcome:'',dKills:0,eKills:0,dScr:0,eScr:0,fh:'',fs:'',sd:'N',note:'' });
+  Object.assign(S.currentMatch, { dc:'',ec:'',dcSlug:'',ecSlug:'',outcome:'',dKills:0,eKills:0,dScr:0,eScr:0,fh:'',fs:'',sd:'N',note:'',supabaseId:null });
   S.sessionStep = 1;
   try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
 }
-function deleteMatch(i) {
+async function deleteMatch(i) {
+  const m = S.sessionMatches[i];
+  if (m && m.supabaseId) {
+    const { error } = await window._supabase.from('matches').delete().eq('id', m.supabaseId);
+    if (error) { console.error('deleteMatch error:', error); }
+  }
   const nm = S.sessionMatches.filter((_, idx) => idx !== i);
   S.sessionMatches = nm;
   try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
@@ -427,7 +442,7 @@ function editMatch(i) {
   const m = S.sessionMatches[i];
   const nm = S.sessionMatches.filter((_, idx) => idx !== i);
   S.sessionMatches = nm;
-  Object.assign(S.currentMatch, { ...m });
+  Object.assign(S.currentMatch, { ...m, supabaseId: m.supabaseId || null });
   S.sessionStep = 3;
   try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
