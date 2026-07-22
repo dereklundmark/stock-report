@@ -49,8 +49,6 @@ const S = {
 try {
   const t = localStorage.getItem('smash_tab');
   if (t && ['home','prefs','battlegrounds','lore','roster'].includes(t)) S.tab = t;
-  const sm = localStorage.getItem('smash_session_matches');
-  if (sm) S.sessionMatches = JSON.parse(sm);
 } catch(e) {}
 
 
@@ -245,6 +243,40 @@ function setTab(tab) {
   render();
 }
 function toggleNav() { S.showNav = !S.showNav; render(); }
+async function loadRecentMatches(rivalryId) {
+  const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
+  const normChar = n => (n || '')
+    .replace(/\bPokemon\b/g, 'Pokémon')
+    .replace(/Mr\. Game and Watch/gi, 'Mr. Game & Watch');
+  const { data, error } = await window._supabase
+    .from('matches')
+    .select('*')
+    .eq('rivalry_id', rivalryId)
+    .gte('created_at', cutoff)
+    .order('created_at', { ascending: true });
+  if (error) { console.error('loadRecentMatches error:', error); return; }
+  S.sessionMatches = (data || []).map(m => ({
+    dc:      normChar(m.p1_char),
+    ec:      normChar(m.p2_char),
+    dcSlug:  toSlug(normChar(m.p1_char)),
+    ecSlug:  toSlug(normChar(m.p2_char)),
+    outcome: m.winner === 'p1' ? 'D' : 'E',
+    dKills:  m.p1_kills  || 0,
+    eKills:  m.p2_kills  || 0,
+    dScr:    m.p1_screams || 0,
+    eScr:    m.p2_screams || 0,
+    fh:      m.first_hit   === 'p1' ? 'D' : m.first_hit   === 'p2' ? 'E' : '',
+    fs:      m.first_stock === 'p1' ? 'D' : m.first_stock === 'p2' ? 'E' : '',
+    platform: m.platforms    ? 'Y' : 'N',
+    sd:       m.sudden_death ? 'Y' : 'N',
+    note:    m.notes || '',
+    venue:   m.venue === 'Online' ? 'online' : 'person',
+    date:    (m.date || '').slice(0, 10),
+    supabaseId: m.id
+  }));
+  render();
+}
+
 function openSession() {
   Object.assign(S, { showSession: true, sessionScreen: S.isLoggedIn ? 'select' : 'login' });
   render();
@@ -304,11 +336,13 @@ async function submitLogin() {
     p2c:   (playerMap[rv.p2_id] || {}).color || '#1FA0E0',
     games: mcMap[rv.id] || 0
   }));
+  const activeDashId = dashboards.length === 1 ? dashboards[0].id : null;
   Object.assign(S, { isLoggedIn: true, loginLoading: false, loginError: '',
     isAdmin, dashboards,
     sessionScreen: dashboards.length === 1 ? 'session' : 'select',
-    activeDashboard: dashboards.length === 1 ? dashboards[0].id : null });
+    activeDashboard: activeDashId });
   render();
+  if (activeDashId) loadRecentMatches(activeDashId);
 }
 function submitLoginOnEnter(e) { if (e.key === 'Enter') submitLogin(); }
 async function logout() {
@@ -318,7 +352,11 @@ async function logout() {
 }
 
 // Dashboard
-function selectDashboard(id) { Object.assign(S, { activeDashboard: id, sessionScreen: 'session' }); render(); }
+function selectDashboard(id) {
+  Object.assign(S, { activeDashboard: id, sessionScreen: 'session' });
+  render();
+  loadRecentMatches(id);
+}
 function goCreateDashboard() { S.sessionScreen = 'create'; render(); }
 function goBackToSelect() { S.sessionScreen = S.dashboards.length > 1 ? 'select' : 'session'; render(); }
 function setCreateP1(val) { S.createP1 = val; render(); }
@@ -424,7 +462,6 @@ async function logMatch() {
   S.sessionMatches = nm;
   Object.assign(S.currentMatch, { dc:'',ec:'',dcSlug:'',ecSlug:'',outcome:'',dKills:0,eKills:0,dScr:0,eScr:0,fh:'',fs:'',sd:'N',note:'',supabaseId:null });
   S.sessionStep = 1;
-  try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
 }
 async function deleteMatch(i) {
@@ -435,7 +472,6 @@ async function deleteMatch(i) {
   }
   const nm = S.sessionMatches.filter((_, idx) => idx !== i);
   S.sessionMatches = nm;
-  try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
 }
 function editMatch(i) {
@@ -444,12 +480,10 @@ function editMatch(i) {
   S.sessionMatches = nm;
   Object.assign(S.currentMatch, { ...m, supabaseId: m.supabaseId || null });
   S.sessionStep = 3;
-  try { localStorage.setItem('smash_session_matches', JSON.stringify(nm)); } catch(e) {}
   render();
 }
 function clearSession() {
   S.sessionMatches = []; S.sessionStep = 0;
-  try { localStorage.removeItem('smash_session_matches'); } catch(e) {}
   render();
 }
 
