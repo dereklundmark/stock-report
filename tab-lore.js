@@ -286,7 +286,7 @@ function renderLore() {
           <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#5C6470;margin-top:6px;">incident${jpShame!==1?'s':''} documented</div>
         </div>
       </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.7;">Jigglypuff games average <span style="color:rgba(255,160,180,.9);font-weight:800;">${jp.screamsMult}×</span> the screams of a normal match. The pink puff doesn't just lose — it haunts.</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.7;">Jigglypuff games average <span style="color:rgba(255,160,180,.9);font-weight:800;">${jp.screamsMult}×</span> the screams of a normal match.</div>
     </div>
 
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
@@ -369,7 +369,7 @@ function renderLore() {
           <image-slot id="hos-e-${s.eslug}" src="characters/${s.eslug}.png" fit="contain" shape="rounded" radius="4" style="width:28px;height:28px;flex-shrink:0;background:rgba(31,160,224,.12);" placeholder="${s.ec}"></image-slot>
           <div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;color:${s.winnerCol};flex-shrink:0;">${s.winnerName} W</div>
         </div>
-        <div style="font-size:12px;line-height:1.5;color:#C8CDD4;font-style:italic;">"${s.note}"</div>
+        <div style="font-size:12px;line-height:1.5;color:#C8CDD4;font-style:italic;">${s.note}</div>
       </div>`).join('')}
     </div>
   </div>
