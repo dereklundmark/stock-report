@@ -267,16 +267,26 @@ function renderLore() {
     </div>
 
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">🩷 THE JIGGLYPUFF CURSE</div>
-      <div style="font-size:13px;color:#9AA3AF;margin-bottom:16px;line-height:1.5;">${p2Name} has played Jigglypuff <span style="color:#EDF0F3;font-weight:700;">${jp.games||0}</span> times.</div>
-      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-        <image-slot id="jp-char" src="characters/jigglypuff.png" fit="contain" shape="circle" style="width:64px;height:64px;background:rgba(255,160,180,.15);" placeholder="Jigglypuff"></image-slot>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+        <image-slot id="jp-char" src="characters/jigglypuff.png" fit="contain" shape="circle" style="width:48px;height:48px;flex-shrink:0;background:rgba(255,160,180,.15);" placeholder="Jigglypuff"></image-slot>
         <div>
-          <div style="font-weight:900;font-size:28px;line-height:1;color:#EDF0F3;letter-spacing:-.02em;">${jp.games||0} games played</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,160,180,.8);margin-top:5px;font-weight:700;">${`BY ${P2} ·`} ${jigglyScreams} COMBINED SCREAMS</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;">🩷 THE JIGGLYPUFF CURSE</div>
+          <div style="font-size:13px;color:#9AA3AF;margin-top:3px;">Every time ${p2Name} picks Jigglypuff, chaos follows.</div>
         </div>
       </div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;">${jigglyNote}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+        <div style="background:rgba(255,160,180,.06);border:1px solid rgba(255,160,180,.15);border-radius:10px;padding:18px;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,160,180,.8);margin-bottom:8px;">COMBINED SCREAMS</div>
+          <div style="font-weight:900;font-size:52px;line-height:1;color:rgba(255,160,180,.9);letter-spacing:-.03em;">${jp.screams||0}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#5C6470;margin-top:6px;">across ${jp.games} games · ${jp.avgScreams} per game</div>
+        </div>
+        <div style="background:rgba(255,160,180,.06);border:1px solid rgba(255,160,180,.15);border-radius:10px;padding:18px;text-align:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(255,160,180,.8);margin-bottom:8px;">HALL OF SHAME</div>
+          <div style="font-weight:900;font-size:52px;line-height:1;color:rgba(255,160,180,.9);letter-spacing:-.03em;">${jpShame}</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#5C6470;margin-top:6px;">incident${jpShame!==1?'s':''} documented</div>
+        </div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.7;">Jigglypuff games average <span style="color:rgba(255,160,180,.9);font-weight:800;">${jp.screamsMult}×</span> the screams of a normal match. The pink puff doesn't just lose — it haunts.</div>
     </div>
 
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">

@@ -357,11 +357,22 @@ function compute(raw, chars, rivalryInfo) {
     : {};
 
   /* ── jigglypuff curse ────────────────────────────────────── */
-  const jpMs = ms.filter(m => m.ec.toLowerCase().includes('jigglypuff'));
+  const jpMs    = ms.filter(m => m.ec.toLowerCase().includes('jigglypuff'));
+  const jpEWins = jpMs.filter(m => m.eWin).length;
+  const jpScreams = jpMs.reduce((s, m) => s + m.dScr + m.eScr, 0);
+  const avgScreamsAll    = games > 0 ? ((dScr + eScr) / games) : 0;
+  const avgScreamsJiggly = jpMs.length > 0 ? (jpScreams / jpMs.length) : 0;
   const jigglypuffCurse = {
-    games:  jpMs.length,
-    dWins:  jpMs.filter(m => m.dWin).length,
-    dPct:   jpMs.length ? Math.round(jpMs.filter(m=>m.dWin).length / jpMs.length * 100) : 0
+    games:        jpMs.length,
+    eWins:        jpEWins,
+    eLosses:      jpMs.length - jpEWins,
+    ePct:         jpMs.length ? Math.round(jpEWins / jpMs.length * 100) : 0,
+    dWins:        jpMs.filter(m => m.dWin).length,
+    dPct:         jpMs.length ? Math.round(jpMs.filter(m=>m.dWin).length / jpMs.length * 100) : 0,
+    screams:      jpScreams,
+    avgScreams:   Math.round(avgScreamsJiggly * 10) / 10,
+    avgScreamsAll: Math.round(avgScreamsAll * 10) / 10,
+    screamsMult:  avgScreamsAll > 0 ? Math.round(avgScreamsJiggly / avgScreamsAll * 10) / 10 : 0
   };
 
   /* ── first hit scream ────────────────────────────────────── */
