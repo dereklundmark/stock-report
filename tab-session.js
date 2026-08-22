@@ -25,7 +25,7 @@ function renderSession() {
   const sessionDW = S.sessionMatches.filter(m => m.outcome === 'D').length;
   const sessionEW = S.sessionMatches.filter(m => m.outcome === 'E').length;
 
-  const activeDash = S.dashboards.find(d => d.id === S.activeDashboard) || S.dashboards[0] || {};
+  const activeDash = S.dashboards.find(d => d.id == S.activeDashboard) || S.dashboards[0] || {};
   const activeDashName = activeDash.name || 'Game Night';
   const p1Name = (activeDash.p1 || 'P1').toUpperCase();
   const p2Name = (activeDash.p2 || 'P2').toUpperCase();
@@ -86,7 +86,7 @@ function renderSession() {
         ${S.isAdmin ? `<div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.12em;padding:3px 8px;border-radius:4px;background:linear-gradient(135deg,rgba(197,36,27,.3),rgba(12,106,172,.3));border:1px solid rgba(255,255,255,.15);color:#EDF0F3;">⚡ ADMIN</div>` : ''}
       </div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
-        ${S.dashboards.map(d => `<div onclick="selectDashboard('${d.id}')" style="display:flex;align-items:center;gap:14px;padding:16px 18px;background:#0F1217;border-radius:12px;border:1px solid rgba(255,255,255,.07);cursor:pointer;">
+        ${S.dashboards.map(d => `<div onclick="selectDashboard(${d.id})" style="display:flex;align-items:center;gap:14px;padding:16px 18px;background:#0F1217;border-radius:12px;border:1px solid rgba(255,255,255,.07);cursor:pointer;">
           <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;">
             <div style="width:28px;height:12px;border-radius:3px;background:${d.p1c};"></div>
             <div style="width:28px;height:12px;border-radius:3px;background:${d.p2c};"></div>
