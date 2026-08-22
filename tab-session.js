@@ -130,9 +130,9 @@ function renderSession() {
 
   /* ─ SESSION BODY ─ */
   const charGrid = chars.map((c, i) => `
-    <div onclick="pickChar(${i})" style="display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 4px;border-radius:8px;cursor:pointer;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);">
-      <image-slot id="sp-${c.slug}" src="characters/${c.slug}.png" fit="contain" shape="rounded" radius="4" style="width:44px;height:44px;background:rgba(255,255,255,.07);"></image-slot>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#9AA3AF;text-align:center;line-height:1.2;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.n}</div>
+    <div onclick="pickChar(${i})" data-n="${c.n.toLowerCase()}" class="sp-char-item" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 6px;border-radius:10px;cursor:pointer;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);">
+      <image-slot id="sp-${c.slug}" src="characters/${c.slug}.png" fit="contain" shape="rounded" radius="6" style="width:64px;height:64px;background:rgba(255,255,255,.07);"></image-slot>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#9AA3AF;text-align:center;line-height:1.3;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.n}</div>
     </div>`).join('');
 
   const dWinBg = cm.outcome === 'D' ? 'rgba(255,82,70,.3)' : 'rgba(255,82,70,.1)';
@@ -165,7 +165,13 @@ function renderSession() {
       ${isPickingD ? `
       <div style="margin-bottom:20px;">
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#FF5246;font-weight:700;margin-bottom:14px;">PICK ${p1Name}'S CHARACTER</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;">${charGrid}</div>
+        <input
+          type="text"
+          placeholder="Search characters…"
+          oninput="(function(q){document.querySelectorAll('.sp-char-item').forEach(function(el){el.style.display=el.dataset.n.includes(q.toLowerCase())?'':'none'})})(this.value)"
+          style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:14px;outline:none;font-family:'JetBrains Mono',monospace;box-sizing:border-box;margin-bottom:10px;"
+          autocomplete="off">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;">${charGrid}</div>
       </div>` : ''}
 
       ${isPickingE ? `
@@ -176,7 +182,13 @@ function renderSession() {
           <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;flex:1;">selected · now pick ${p2Name}'s</div>
         </div>
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#1FA0E0;font-weight:700;margin-bottom:14px;">PICK ${p2Name}'S CHARACTER</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;">${charGrid}</div>
+        <input
+          type="text"
+          placeholder="Search characters…"
+          oninput="(function(q){document.querySelectorAll('.sp-char-item').forEach(function(el){el.style.display=el.dataset.n.includes(q.toLowerCase())?'':'none'})})(this.value)"
+          style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:14px;outline:none;font-family:'JetBrains Mono',monospace;box-sizing:border-box;margin-bottom:10px;"
+          autocomplete="off">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;">${charGrid}</div>
       </div>` : ''}
 
       ${isStats ? `
