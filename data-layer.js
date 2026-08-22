@@ -1,18 +1,21 @@
 /* data-layer.js
-   Fetches matches + characters from Supabase for rivalry_id = 1
+   Fetches matches + characters from Supabase for the given rivalry_id
    and computes window.SMASH_DATA in the same shape as the old smash-data.js,
    so every tab renders exactly as before — but now from live data.
    A Realtime listener re-fetches and recomputes whenever a new match is inserted.
 */
 
-async function loadSmashData() {
+window._currentRivalryId = 1; // tracks which rivalry the main dashboard is showing
+
+async function loadSmashData(rivalryId = window._currentRivalryId || 1) {
+  window._currentRivalryId = rivalryId;
   const sb = window._supabase;
 
   /* ── fetch both tables in parallel ───────────────────────── */
   const [mRes, cRes, rRes] = await Promise.all([
-    sb.from('matches').select('*').eq('rivalry_id', 1).order('date', { ascending: true }).order('id', { ascending: true }),
+    sb.from('matches').select('*').eq('rivalry_id', rivalryId).order('date', { ascending: true }).order('id', { ascending: true }),
     sb.from('characters').select('*'),
-    sb.from('rivalries').select('name, p1:players!rivalries_p1_id_fkey(name, color), p2:players!rivalries_p2_id_fkey(name, color)').eq('id', 1).single()
+    sb.from('rivalries').select('name, p1:players!rivalries_p1_id_fkey(name, color), p2:players!rivalries_p2_id_fkey(name, color)').eq('id', rivalryId).single()
   ]);
 
   if (mRes.error) { console.error('matches fetch:', mRes.error); return; }
@@ -41,7 +44,7 @@ window._supabase
   .on(
     'postgres_changes',
     { event: 'INSERT', schema: 'public', table: 'matches' },
-    () => { loadSmashData(); }
+    () => { loadSmashData(window._currentRivalryId || 1); }
   )
   .subscribe();
 

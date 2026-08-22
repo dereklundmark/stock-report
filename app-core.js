@@ -42,6 +42,9 @@ const S = {
     dScr: 0, eScr: 0,
     fh: '', fs: '', sd: 'N', note: ''
   },
+  myPlayerId:    null,
+  myPlayerName:  '',
+  myPlayerColor: '#FF5246',
   sessionMatches: []
 };
 
@@ -270,9 +273,12 @@ async function submitLogin() {
   // Load this player's rivalries
   const uid = data.user.id;
   const { data: playerRow } = await window._supabase
-    .from('players').select('id,name,is_admin').eq('auth_id', uid).single();
+    .from('players').select('id,name,color,is_admin').eq('auth_id', uid).single();
   const isAdmin = playerRow ? playerRow.is_admin : false;
   const pid     = playerRow ? playerRow.id       : null;
+  // Store logged-in player info for create-rivalry form
+  const myPlayerName  = playerRow ? (playerRow.name  || '') : '';
+  const myPlayerColor = playerRow ? (playerRow.color || '#FF5246') : '#FF5246';
   let rivalriesData = [];
   if (isAdmin) {
     const { data: rv } = await window._supabase
@@ -305,8 +311,9 @@ async function submitLogin() {
   }));
   Object.assign(S, { isLoggedIn: true, loginLoading: false, loginError: '',
     isAdmin, dashboards,
-    sessionScreen: dashboards.length === 1 ? 'session' : 'select',
-    activeDashboard: dashboards.length === 1 ? dashboards[0].id : null });
+    myPlayerId: pid, myPlayerName, myPlayerColor,
+    sessionScreen: 'select',
+    activeDashboard: null });
   render();
 }
 function submitLoginOnEnter(e) { if (e.key === 'Enter') submitLogin(); }
@@ -317,25 +324,56 @@ async function logout() {
 }
 
 // Dashboard
-function selectDashboard(id) { Object.assign(S, { activeDashboard: id, sessionScreen: 'session' }); render(); }
-function goCreateDashboard() { S.sessionScreen = 'create'; render(); }
-function goBackToSelect() { S.sessionScreen = S.dashboards.length > 1 ? 'select' : 'session'; render(); }
+function selectDashboard(id) {
+  Object.assign(S, { activeDashboard: id, sessionScreen: 'session' });
+  loadSmashData(id);
+  loadRecentMatches(id);
+  render();
+}
+function goCreateDashboard() {
+  S.sessionScreen = 'create';
+  S.createP2 = ''; S.createP2Color = '#1FA0E0'; S.createError = '';
+  render();
+}
+function goBackToSelect() { S.sessionScreen = 'select'; render(); }
 function setCreateP1(val) { S.createP1 = val; render(); }
 function setCreateP2(val) { S.createP2 = val; render(); }
 function setCreateP1Color(c) { S.createP1Color = c; render(); }
 function setCreateP2Color(c) { S.createP2Color = c; render(); }
 function setCreateInviteEmail(val) { S.createInviteEmail = val; render(); }
-function submitCreateDashboard() {
-  if (!S.createP1 || !S.createP2) { S.createError = 'Both player names are required.'; render(); return; }
+async function submitCreateDashboard() {
+  if (!S.createP2) { S.createError = 'Enter your rival\'s name.'; render(); return; }
+  const sb = window._supabase;
+
+  // Find or create the rival player
+  let rivalId;
+  const { data: existing } = await sb.from('players').select('id').eq('name', S.createP2);
+  if (existing && existing.length > 0) {
+    rivalId = existing[0].id;
+  } else {
+    const { data: newP, error: pErr } = await sb.from('players')
+      .insert([{ name: S.createP2, color: S.createP2Color || '#1FA0E0' }])
+      .select('id').single();
+    if (pErr) { S.createError = 'Could not create player: ' + pErr.message; render(); return; }
+    rivalId = newP.id;
+  }
+
+  // Create the rivalry (logged-in player is always p1)
+  const { data: rv, error: rErr } = await sb.from('rivalries')
+    .insert([{ p1_id: S.myPlayerId, p2_id: rivalId, name: S.myPlayerName + ' vs ' + S.createP2 }])
+    .select('id,name').single();
+  if (rErr) { S.createError = 'Could not create rivalry: ' + rErr.message; render(); return; }
+
   const nd = {
-    id: S.createP1.toLowerCase().replace(/\s/g,'-') + '-' + S.createP2.toLowerCase().replace(/\s/g,'-'),
-    name: S.createP1 + ' vs ' + S.createP2,
-    p1: S.createP1, p2: S.createP2,
-    p1c: S.createP1Color, p2c: S.createP2Color, games: 0
+    id: rv.id, name: rv.name,
+    p1: S.myPlayerName, p2: S.createP2,
+    p1c: S.myPlayerColor || '#FF5246', p2c: S.createP2Color || '#1FA0E0', games: 0
   };
   Object.assign(S, {
-    dashboards: [...S.dashboards, nd], activeDashboard: nd.id,
-    sessionScreen: 'select', createP1: '', createP2: '', createInviteEmail: '', createError: ''
+    dashboards: [...S.dashboards, nd],
+    activeDashboard: null,
+    sessionScreen: 'select',
+    createP2: '', createP2Color: '#1FA0E0', createInviteEmail: '', createError: ''
   });
   render();
 }
