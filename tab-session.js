@@ -109,28 +109,19 @@ function renderSession() {
     <div style="flex:1;overflow-y:auto;padding:24px;max-width:600px;width:100%;margin:0 auto;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5C6470;margin-bottom:20px;">SET UP YOUR RIVALRY</div>
       <div style="display:flex;flex-direction:column;gap:16px;">
-        <div style="background:#0F1217;border-radius:12px;padding:18px;border:1px solid rgba(255,82,70,.2);">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#FF5246;font-weight:700;margin-bottom:12px;">PLAYER 1</div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">
-            <input id="create-p1" type="text" value="${S.createP1}" oninput="setCreateP1(this.value)" placeholder="Enter name…" style="padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:14px;font-weight:700;outline:none;font-family:'Archivo',sans-serif;">
-            <div style="display:flex;gap:6px;">
-              ${['#FF5246','#E87722','#9B59B6'].map(c => `<div onclick="setCreateP1Color('${c}')" style="width:28px;height:28px;border-radius:6px;background:${c};cursor:pointer;border:2px solid ${S.createP1Color===c?'#fff':'transparent'};"></div>`).join('')}
-            </div>
-          </div>
+        <div style="background:#0F1217;border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,.1);">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#5C6470;font-weight:700;margin-bottom:8px;">YOU</div>
+          <div style="font-weight:900;font-size:18px;color:#EDF0F3;">${S.myPlayerName || 'You'}</div>
         </div>
         <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-weight:900;font-size:14px;color:#3C4450;letter-spacing:.2em;">VS</div>
         <div style="background:#0F1217;border-radius:12px;padding:18px;border:1px solid rgba(31,160,224,.2);">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:12px;">PLAYER 2</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:12px;">YOUR RIVAL</div>
           <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">
-            <input id="create-p2" type="text" value="${S.createP2}" oninput="setCreateP2(this.value)" placeholder="Enter name…" style="padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:14px;font-weight:700;outline:none;font-family:'Archivo',sans-serif;">
+            <input id="create-p2" type="text" value="${S.createP2}" oninput="setCreateP2(this.value)" placeholder="Enter their name…" autocomplete="off" style="padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:14px;font-weight:700;outline:none;font-family:'Archivo',sans-serif;">
             <div style="display:flex;gap:6px;">
               ${['#1FA0E0','#27AE60','#F1C40F'].map(c => `<div onclick="setCreateP2Color('${c}')" style="width:28px;height:28px;border-radius:6px;background:${c};cursor:pointer;border:2px solid ${S.createP2Color===c?'#fff':'transparent'};"></div>`).join('')}
             </div>
           </div>
-        </div>
-        <div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">INVITE PLAYER 2 BY EMAIL <span style="color:#3C4450;">(optional)</span></div>
-          <input id="create-invite-email" type="email" value="${S.createInviteEmail}" oninput="setCreateInviteEmail(this.value)" placeholder="friend@email.com" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:14px;outline:none;font-family:'Archivo',sans-serif;box-sizing:border-box;">
         </div>
         ${S.createError ? `<div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FB6256;padding:10px 14px;border-radius:8px;background:rgba(255,82,70,.08);">${S.createError}</div>` : ''}
         <div onclick="submitCreateDashboard()" style="padding:16px;border-radius:10px;background:linear-gradient(135deg,#C5241B,#0C6AAC);text-align:center;cursor:pointer;font-weight:900;font-size:14px;letter-spacing:.06em;">CREATE RIVALRY</div>
@@ -257,15 +248,15 @@ function renderSession() {
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">1ST HIT</div>
             <div style="display:flex;gap:4px;">
-              <div onclick="setFHD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fhDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">D</div>
-              <div onclick="setFHE()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fhEActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;">E</div>
+              <div onclick="setFHD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fhDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">${p1Name[0]}</div>
+              <div onclick="setFHE()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fhEActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;">${p2Name[0]}</div>
             </div>
           </div>
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">1ST STOCK</div>
             <div style="display:flex;gap:4px;">
-              <div onclick="setFSD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">D</div>
-              <div onclick="setFSE()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsEActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;">E</div>
+              <div onclick="setFSD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">${p1Name[0]}</div>
+              <div onclick="setFSE()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsEActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;">${p2Name[0]}</div>
             </div>
           </div>
         </div>
