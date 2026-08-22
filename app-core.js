@@ -379,6 +379,8 @@ async function submitCreateDashboard() {
 }
 
 // Venue
+function _domUpdate(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+
 function setOnline() { S.sessionVenue = 'online'; render(); }
 function setInPerson() { S.sessionVenue = 'person'; render(); }
 
@@ -402,22 +404,50 @@ function goPickD() {
 }
 
 // Match stats
-function setP1Win() { Object.assign(S.currentMatch, { outcome: 'D', dKills: 5 }); render(); }
-function setP2Win() { Object.assign(S.currentMatch, { outcome: 'E', eKills: 5 }); render(); }
-function dKillMinus() { S.currentMatch.dKills = Math.max(0, (S.currentMatch.dKills||0) - 1); render(); }
-function dKillPlus()  { S.currentMatch.dKills = Math.min(5, (S.currentMatch.dKills||0) + 1); render(); }
-function eKillMinus() { S.currentMatch.eKills = Math.max(0, (S.currentMatch.eKills||0) - 1); render(); }
-function eKillPlus()  { S.currentMatch.eKills = Math.min(5, (S.currentMatch.eKills||0) + 1); render(); }
-function dScrMinus()  { S.currentMatch.dScr = Math.max(0, (S.currentMatch.dScr||0) - 1); render(); }
-function dScrPlus()   { S.currentMatch.dScr = (S.currentMatch.dScr||0) + 1; render(); }
-function eScrMinus()  { S.currentMatch.eScr = Math.max(0, (S.currentMatch.eScr||0) - 1); render(); }
-function eScrPlus()   { S.currentMatch.eScr = (S.currentMatch.eScr||0) + 1; render(); }
-function togglePlatform() { S.currentMatch.platform = S.currentMatch.platform === 'Y' ? 'N' : 'Y'; render(); }
-function toggleSD()       { S.currentMatch.sd = S.currentMatch.sd === 'Y' ? 'N' : 'Y'; render(); }
-function setFHD() { S.currentMatch.fh = S.currentMatch.fh === 'D' ? '' : 'D'; render(); }
-function setFHE() { S.currentMatch.fh = S.currentMatch.fh === 'E' ? '' : 'E'; render(); }
-function setFSD() { S.currentMatch.fs = S.currentMatch.fs === 'D' ? '' : 'D'; render(); }
-function setFSE() { S.currentMatch.fs = S.currentMatch.fs === 'E' ? '' : 'E'; render(); }
+function setP1Win() { Object.assign(S.currentMatch, { outcome: 'D', dKills: 5 }); _domUpdate('cnt-dKills', 5); render(); }
+function setP2Win() { Object.assign(S.currentMatch, { outcome: 'E', eKills: 5 }); _domUpdate('cnt-eKills', 5); render(); }
+function dKillMinus() { S.currentMatch.dKills = Math.max(0, (S.currentMatch.dKills||0) - 1); _domUpdate('cnt-dKills', S.currentMatch.dKills); }
+function dKillPlus()  { S.currentMatch.dKills = Math.min(5, (S.currentMatch.dKills||0) + 1); _domUpdate('cnt-dKills', S.currentMatch.dKills); }
+function eKillMinus() { S.currentMatch.eKills = Math.max(0, (S.currentMatch.eKills||0) - 1); _domUpdate('cnt-eKills', S.currentMatch.eKills); }
+function eKillPlus()  { S.currentMatch.eKills = Math.min(5, (S.currentMatch.eKills||0) + 1); _domUpdate('cnt-eKills', S.currentMatch.eKills); }
+function dScrMinus()  { S.currentMatch.dScr = Math.max(0, (S.currentMatch.dScr||0) - 1); _domUpdate('cnt-dScr', S.currentMatch.dScr); }
+function dScrPlus()   { S.currentMatch.dScr = (S.currentMatch.dScr||0) + 1; _domUpdate('cnt-dScr', S.currentMatch.dScr); }
+function eScrMinus()  { S.currentMatch.eScr = Math.max(0, (S.currentMatch.eScr||0) - 1); _domUpdate('cnt-eScr', S.currentMatch.eScr); }
+function eScrPlus()   { S.currentMatch.eScr = (S.currentMatch.eScr||0) + 1; _domUpdate('cnt-eScr', S.currentMatch.eScr); }
+function togglePlatform() {
+  S.currentMatch.platform = S.currentMatch.platform === 'Y' ? 'N' : 'Y';
+  const el = document.getElementById('btn-platform');
+  if (el) el.textContent = S.currentMatch.platform === 'Y' ? 'ON ✓' : 'OFF';
+}
+function toggleSD() {
+  S.currentMatch.sd = S.currentMatch.sd === 'Y' ? 'N' : 'Y';
+  const el = document.getElementById('btn-sd');
+  if (el) el.textContent = S.currentMatch.sd === 'Y' ? 'YES ⚡' : 'NO';
+}
+function setFHD() {
+  S.currentMatch.fh = S.currentMatch.fh === 'D' ? '' : 'D';
+  const a = document.getElementById('btn-fhD'), b = document.getElementById('btn-fhE');
+  if (a) a.style.borderColor = S.currentMatch.fh === 'D' ? '#FF5246' : 'rgba(255,255,255,.06)';
+  if (b) b.style.borderColor = S.currentMatch.fh === 'E' ? '#1FA0E0' : 'rgba(255,255,255,.06)';
+}
+function setFHE() {
+  S.currentMatch.fh = S.currentMatch.fh === 'E' ? '' : 'E';
+  const a = document.getElementById('btn-fhD'), b = document.getElementById('btn-fhE');
+  if (a) a.style.borderColor = S.currentMatch.fh === 'D' ? '#FF5246' : 'rgba(255,255,255,.06)';
+  if (b) b.style.borderColor = S.currentMatch.fh === 'E' ? '#1FA0E0' : 'rgba(255,255,255,.06)';
+}
+function setFSD() {
+  S.currentMatch.fs = S.currentMatch.fs === 'D' ? '' : 'D';
+  const a = document.getElementById('btn-fsD'), b = document.getElementById('btn-fsE');
+  if (a) a.style.borderColor = S.currentMatch.fs === 'D' ? '#FF5246' : 'rgba(255,255,255,.06)';
+  if (b) b.style.borderColor = S.currentMatch.fs === 'E' ? '#1FA0E0' : 'rgba(255,255,255,.06)';
+}
+function setFSE() {
+  S.currentMatch.fs = S.currentMatch.fs === 'E' ? '' : 'E';
+  const a = document.getElementById('btn-fsD'), b = document.getElementById('btn-fsE');
+  if (a) a.style.borderColor = S.currentMatch.fs === 'D' ? '#FF5246' : 'rgba(255,255,255,.06)';
+  if (b) b.style.borderColor = S.currentMatch.fs === 'E' ? '#1FA0E0' : 'rgba(255,255,255,.06)';
+}
 function setNote(val)  { S.currentMatch.note = val; } // No render — textarea updates itself
 
 async function logMatch() {

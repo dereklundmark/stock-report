@@ -221,15 +221,15 @@ function renderSession() {
           <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <div style="width:8px;height:8px;border-radius:50%;background:#FF5246;flex-shrink:0;"></div>
-              <div onclick="dKillMinus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;color:#EDF0F3;">−</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:900;width:28px;text-align:center;">${cm.dKills||0}</div>
-              <div onclick="dKillPlus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;color:#EDF0F3;">+</div>
+              <div onclick="dKillMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">−</div>
+              <div id="cnt-dKills" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.dKills||0}</div>
+              <div onclick="dKillPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">+</div>
             </div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3C4450;">|</div>
             <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;">
-              <div onclick="eKillMinus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;color:#EDF0F3;">−</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:900;width:28px;text-align:center;">${cm.eKills||0}</div>
-              <div onclick="eKillPlus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;color:#EDF0F3;">+</div>
+              <div onclick="eKillMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">−</div>
+              <div id="cnt-eKills" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.eKills||0}</div>
+              <div onclick="eKillPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">+</div>
               <div style="width:8px;height:8px;border-radius:50%;background:#1FA0E0;flex-shrink:0;"></div>
             </div>
           </div>
@@ -241,15 +241,15 @@ function renderSession() {
           <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
             <div style="display:flex;align-items:center;gap:8px;">
               <div style="width:8px;height:8px;border-radius:50%;background:#FF5246;flex-shrink:0;"></div>
-              <div onclick="dScrMinus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;">−</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:900;width:28px;text-align:center;">${cm.dScr||0}</div>
-              <div onclick="dScrPlus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;">+</div>
+              <div onclick="dScrMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">−</div>
+              <div id="cnt-dScr" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.dScr||0}</div>
+              <div onclick="dScrPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">+</div>
             </div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3C4450;">|</div>
             <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;">
-              <div onclick="eScrMinus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;">−</div>
-              <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:900;width:28px;text-align:center;">${cm.eScr||0}</div>
-              <div onclick="eScrPlus()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;font-weight:700;">+</div>
+              <div onclick="eScrMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">−</div>
+              <div id="cnt-eScr" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.eScr||0}</div>
+              <div onclick="eScrPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">+</div>
               <div style="width:8px;height:8px;border-radius:50%;background:#1FA0E0;flex-shrink:0;"></div>
             </div>
           </div>
@@ -260,26 +260,26 @@ function renderSession() {
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">1ST HIT</div>
             <div style="display:flex;gap:4px;">
-              <div onclick="setFHD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fhDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">${p1Name[0]}</div>
-              <div onclick="setFHE()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fhEActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;">${p2Name[0]}</div>
+              <div id="btn-fhD" onclick="setFHD()" style="flex:1;padding:14px 10px;border-radius:8px;border:1px solid ${fhDActive};font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;touch-action:manipulation;">${p1Name[0]}</div>
+              <div id="btn-fhE" onclick="setFHE()" style="flex:1;padding:14px 10px;border-radius:8px;border:1px solid ${fhEActive};font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;touch-action:manipulation;">${p2Name[0]}</div>
             </div>
           </div>
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">1ST STOCK</div>
             <div style="display:flex;gap:4px;">
-              <div onclick="setFSD()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsDActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;">${p1Name[0]}</div>
-              <div onclick="setFSE()" style="flex:1;padding:10px;border-radius:8px;border:1px solid ${fsEActive};font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;">${p2Name[0]}</div>
+              <div id="btn-fsD" onclick="setFSD()" style="flex:1;padding:14px 10px;border-radius:8px;border:1px solid ${fsDActive};font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:800;cursor:pointer;background:rgba(255,82,70,.08);text-align:center;color:#FF5246;touch-action:manipulation;">${p1Name[0]}</div>
+              <div id="btn-fsE" onclick="setFSE()" style="flex:1;padding:14px 10px;border-radius:8px;border:1px solid ${fsEActive};font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:800;cursor:pointer;background:rgba(31,160,224,.08);text-align:center;color:#1FA0E0;touch-action:manipulation;">${p2Name[0]}</div>
             </div>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">PLATFORM</div>
-            <div onclick="togglePlatform()" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;">${cm.platform==='Y' ? 'ON ✓' : 'OFF'}</div>
+            <div id="btn-platform" onclick="togglePlatform()" style="padding:14px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;touch-action:manipulation;">${cm.platform==='Y' ? 'ON ✓' : 'OFF'}</div>
           </div>
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">SUDDEN DEATH</div>
-            <div onclick="toggleSD()" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;">${cm.sd==='Y' ? 'YES ⚡' : 'NO'}</div>
+            <div id="btn-sd" onclick="toggleSD()" style="padding:14px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;cursor:pointer;background:rgba(255,255,255,.03);text-align:center;touch-action:manipulation;">${cm.sd==='Y' ? 'YES ⚡' : 'NO'}</div>
           </div>
         </div>
 
