@@ -305,8 +305,8 @@ async function submitLogin() {
     name:  rv.name,
     p1:    (playerMap[rv.p1_id] || {}).name || 'P1',
     p2:    (playerMap[rv.p2_id] || {}).name || 'P2',
-    p1c:   (playerMap[rv.p1_id] || {}).color || '#FF5246',
-    p2c:   (playerMap[rv.p2_id] || {}).color || '#1FA0E0',
+    p1c:   '#FF5246',
+    p2c:   '#1FA0E0',
     games: mcMap[rv.id] || 0
   }));
   Object.assign(S, { isLoggedIn: true, loginLoading: false, loginError: '',
@@ -352,7 +352,7 @@ async function submitCreateDashboard() {
     rivalId = existing[0].id;
   } else {
     const { data: newP, error: pErr } = await sb.from('players')
-      .insert([{ name: S.createP2, color: S.createP2Color || '#1FA0E0' }])
+      .insert([{ name: S.createP2, color: '#1FA0E0' }])
       .select('id').single();
     if (pErr) { S.createError = 'Could not create player: ' + pErr.message; render(); return; }
     rivalId = newP.id;

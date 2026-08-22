@@ -56,8 +56,8 @@ function renderBattlegrounds() {
         <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6470;">${v.n} GAMES</span>
       </div>
       <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:800;margin-bottom:8px;">
-        <span style="color:#FF5246;">D ${v.dPct}%</span>
-        <span style="color:#1FA0E0;">${v.ePct}% E</span>
+        <span style="color:#FF5246;">${P1[0]} ${v.dPct}%</span>
+        <span style="color:#1FA0E0;">${v.ePct}% ${P2[0]}</span>
       </div>
       <div style="display:flex;height:30px;border-radius:6px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:#fff;">
         <div style="width:${v.dPct}%;background:linear-gradient(90deg,#BE221A,#FF5246);display:flex;align-items:center;padding-left:10px;">${v.d}W</div>
@@ -86,8 +86,8 @@ function renderBattlegrounds() {
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5C6470;">${v.n} GAMES</div>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#FF5246;font-weight:700;">D ${v.dPct}%</div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#1FA0E0;font-weight:700;">${v.ePct}% E</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#FF5246;font-weight:700;">${P1[0]} ${v.dPct}%</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#1FA0E0;font-weight:700;">${v.ePct}% ${P2[0]}</div>
       </div>
       <div style="display:flex;border-radius:6px;overflow:hidden;height:32px;">
         <div style="width:${v.dPct}%;background:linear-gradient(90deg,#C5241B,#FB6256);display:flex;align-items:center;padding-left:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:800;color:#fff;white-space:nowrap;">${v.d}W</span></div>

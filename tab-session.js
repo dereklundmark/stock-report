@@ -116,11 +116,8 @@ function renderSession() {
         <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-weight:900;font-size:14px;color:#3C4450;letter-spacing:.2em;">VS</div>
         <div style="background:#0F1217;border-radius:12px;padding:18px;border:1px solid rgba(31,160,224,.2);">
           <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#1FA0E0;font-weight:700;margin-bottom:12px;">YOUR RIVAL</div>
-          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;">
+          <div style="display:grid;grid-template-columns:1fr;gap:10px;align-items:center;">
             <input id="create-p2" type="text" value="${S.createP2}" oninput="setCreateP2(this.value)" placeholder="Enter their name…" autocomplete="off" style="padding:12px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:14px;font-weight:700;outline:none;font-family:'Archivo',sans-serif;">
-            <div style="display:flex;gap:6px;">
-              ${['#1FA0E0','#27AE60','#F1C40F'].map(c => `<div onclick="setCreateP2Color('${c}')" style="width:28px;height:28px;border-radius:6px;background:${c};cursor:pointer;border:2px solid ${S.createP2Color===c?'#fff':'transparent'};"></div>`).join('')}
-            </div>
           </div>
         </div>
         ${S.createError ? `<div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#FB6256;padding:10px 14px;border-radius:8px;background:rgba(255,82,70,.08);">${S.createError}</div>` : ''}
