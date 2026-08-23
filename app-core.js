@@ -325,7 +325,7 @@ async function logout() {
 
 // Dashboard
 function selectDashboard(id) {
-  Object.assign(S, { activeDashboard: id, sessionScreen: 'session' });
+  Object.assign(S, { activeDashboard: id, sessionScreen: 'session', sessionMatches: [] });
   loadSmashData(id);
   loadRecentMatches(id);
   render();

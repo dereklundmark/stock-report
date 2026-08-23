@@ -62,7 +62,7 @@ function renderSession() {
           <div style="font-weight:900;font-size:28px;letter-spacing:-.02em;margin-bottom:4px;"><span style="color:#FF5246;letter-spacing:.04em;">STOCK</span> <span style="color:#5C6470;font-size:18px;font-weight:700;">✦</span> <span style="color:#1FA0E0;letter-spacing:.04em;">REPORT</span></div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:#5C6470;">SIGN IN TO LOG A MATCH</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">
           <div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">EMAIL</div>
             <input id="login-email" type="email" value="${S.loginEmail}" oninput="setLoginEmail(this.value)" placeholder="you@email.com" autocomplete="email" style="width:100%;padding:14px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#EDF0F3;font-size:15px;outline:none;font-family:'Archivo',sans-serif;box-sizing:border-box;">
@@ -85,7 +85,7 @@ function renderSession() {
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5C6470;">SELECT A RIVALRY TO LOG MATCHES</div>
         ${S.isAdmin ? `<div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.12em;padding:3px 8px;border-radius:4px;background:linear-gradient(135deg,rgba(197,36,27,.3),rgba(12,106,172,.3));border:1px solid rgba(255,255,255,.15);color:#EDF0F3;">⚡ ADMIN</div>` : ''}
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
         ${S.dashboards.map(d => `<div onclick="selectDashboard(${d.id})" style="display:flex;align-items:center;gap:14px;padding:16px 18px;background:#0F1217;border-radius:12px;border:1px solid rgba(255,255,255,.07);cursor:pointer;">
           <div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;">
             <div style="width:28px;height:12px;border-radius:3px;background:${d.p1c};"></div>
@@ -107,7 +107,7 @@ function renderSession() {
   /* ─ CREATE RIVALRY ─ */
   const createHtml = isCreate ? `
     <div style="flex:1;overflow-y:auto;padding:24px;max-width:600px;width:100%;margin:0 auto;">
-      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5C6470;margin-bottom:20px;">SET UP YOUR RIVALRY</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5C6470;margin-bottom:14px;">SET UP YOUR RIVALRY</div>
       <div style="display:flex;flex-direction:column;gap:16px;">
         <div style="background:#0F1217;border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,.1);">
           <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;color:#5C6470;font-weight:700;margin-bottom:8px;">YOU</div>
@@ -160,7 +160,7 @@ function renderSession() {
     <div style="flex:1;overflow-y:auto;padding:20px;max-width:600px;width:100%;margin:0 auto;">
 
       ${isPickingD ? `
-      <div style="margin-bottom:20px;">
+      <div style="margin-bottom:14px;">
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#FF5246;font-weight:700;margin-bottom:14px;">PICK ${p1Name}'S CHARACTER</div>
         <input
           type="text"
@@ -172,7 +172,7 @@ function renderSession() {
       </div>` : ''}
 
       ${isPickingE ? `
-      <div style="margin-bottom:20px;">
+      <div style="margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
           <image-slot id="picked-d" src="characters/${cm.dcSlug||'_'}.png" fit="contain" shape="rounded" radius="4" style="width:32px;height:32px;background:rgba(255,82,70,.12);" placeholder="${cm.dc}"></image-slot>
           <div style="font-size:12px;font-weight:700;color:#FF5246;">${cm.dc}</div>
@@ -189,9 +189,9 @@ function renderSession() {
       </div>` : ''}
 
       ${isStats ? `
-      <div style="background:#0F1217;border-radius:14px;padding:20px;margin-bottom:20px;border:1px solid rgba(255,255,255,.07);">
+      <div style="background:#0F1217;border-radius:14px;padding:20px;margin-bottom:14px;border:1px solid rgba(255,255,255,.07);">
         <!-- MATCHUP HEADER -->
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06);">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06);">
           <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;">
             <image-slot id="sf-dc" src="characters/${cm.dcSlug||'_'}.png" fit="contain" shape="rounded" radius="6" style="width:52px;height:52px;background:rgba(255,82,70,.12);" placeholder="${cm.dc}"></image-slot>
             <div style="font-family:'JetBrains Mono',monospace;font-size:8px;color:#FF5246;font-weight:700;">${p1Name}</div>
@@ -207,47 +207,47 @@ function renderSession() {
 
         <!-- WHO WON -->
         <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#5C6470;margin-bottom:8px;">WHO WON?</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
           <div onclick="setP1Win()" style="padding:14px;border-radius:10px;background:${dWinBg};border:${dWinBorder};text-align:center;cursor:pointer;font-weight:900;font-size:16px;color:#FF5246;letter-spacing:.04em;">${p1Name}</div>
           <div onclick="setP2Win()" style="padding:14px;border-radius:10px;background:${eWinBg};border:${eWinBorder};text-align:center;cursor:pointer;font-weight:900;font-size:16px;color:#1FA0E0;letter-spacing:.04em;">${p2Name}</div>
         </div>
 
         <!-- KILLS -->
-        <div style="margin-bottom:16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#5C6470;margin-bottom:10px;">KILLS</div>
+        <div style="margin-bottom:12px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#5C6470;margin-bottom:8px;">KILLS</div>
           <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:8px;height:8px;border-radius:50%;background:#FF5246;flex-shrink:0;"></div>
-              <div onclick="dKillMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">−</div>
-              <div id="cnt-dKills" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.dKills||0}</div>
-              <div onclick="dKillPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">+</div>
+            <div style="display:flex;align-items:center;gap:5px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:#FF5246;flex-shrink:0;"></div>
+              <div onclick="dKillMinus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">−</div>
+              <div id="cnt-dKills" style="font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:900;width:24px;text-align:center;">${cm.dKills||0}</div>
+              <div onclick="dKillPlus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">+</div>
             </div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3C4450;">|</div>
-            <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;">
-              <div onclick="eKillMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">−</div>
-              <div id="cnt-eKills" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.eKills||0}</div>
-              <div onclick="eKillPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">+</div>
-              <div style="width:8px;height:8px;border-radius:50%;background:#1FA0E0;flex-shrink:0;"></div>
+            <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;">
+              <div onclick="eKillMinus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">−</div>
+              <div id="cnt-eKills" style="font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:900;width:24px;text-align:center;">${cm.eKills||0}</div>
+              <div onclick="eKillPlus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;color:#EDF0F3;touch-action:manipulation;">+</div>
+              <div style="width:6px;height:6px;border-radius:50%;background:#1FA0E0;flex-shrink:0;"></div>
             </div>
           </div>
         </div>
 
         <!-- SCREAMS -->
-        <div style="margin-bottom:16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#5C6470;margin-bottom:10px;">SCREAMS</div>
+        <div style="margin-bottom:12px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;color:#5C6470;margin-bottom:8px;">SCREAMS</div>
           <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div style="width:8px;height:8px;border-radius:50%;background:#FF5246;flex-shrink:0;"></div>
-              <div onclick="dScrMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">−</div>
-              <div id="cnt-dScr" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.dScr||0}</div>
-              <div onclick="dScrPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">+</div>
+            <div style="display:flex;align-items:center;gap:5px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:#FF5246;flex-shrink:0;"></div>
+              <div onclick="dScrMinus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;touch-action:manipulation;">−</div>
+              <div id="cnt-dScr" style="font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:900;width:24px;text-align:center;">${cm.dScr||0}</div>
+              <div onclick="dScrPlus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;touch-action:manipulation;">+</div>
             </div>
             <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#3C4450;">|</div>
-            <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;">
-              <div onclick="eScrMinus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">−</div>
-              <div id="cnt-eScr" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:900;width:32px;text-align:center;">${cm.eScr||0}</div>
-              <div onclick="eScrPlus()" style="width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;font-weight:700;touch-action:manipulation;">+</div>
-              <div style="width:8px;height:8px;border-radius:50%;background:#1FA0E0;flex-shrink:0;"></div>
+            <div style="display:flex;align-items:center;gap:5px;justify-content:flex-end;">
+              <div onclick="eScrMinus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;touch-action:manipulation;">−</div>
+              <div id="cnt-eScr" style="font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:900;width:24px;text-align:center;">${cm.eScr||0}</div>
+              <div onclick="eScrPlus()" style="width:42px;height:42px;border-radius:9px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;font-weight:700;touch-action:manipulation;">+</div>
+              <div style="width:6px;height:6px;border-radius:50%;background:#1FA0E0;flex-shrink:0;"></div>
             </div>
           </div>
         </div>
