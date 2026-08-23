@@ -11,8 +11,11 @@ function renderTeamSheet() {
   const P1 = p1Name.toUpperCase();
   const P2 = p2Name.toUpperCase();
 
-  const dRanked = rankWinrate(D.dRoster);
-  const eRanked = rankWinrate(D.eRoster);
+  const dRankedRaw = rankWinrate(D.dRoster);
+  const eRankedRaw = rankWinrate(D.eRoster);
+  // Fall back to full roster sorted by games if no character has 3+ games yet
+  const dRanked = dRankedRaw.length > 0 ? dRankedRaw : [...(D.dRoster||[])].sort((a,b)=>b.g-a.g);
+  const eRanked = eRankedRaw.length > 0 ? eRankedRaw : [...(D.eRoster||[])].sort((a,b)=>b.g-a.g);
   const dTop6Raw = dRanked.slice(0, 6);
   const eTop6Raw = eRanked.slice(0, 6);
   while (dTop6Raw.length < 6) dTop6Raw.push({ n: '—', slug: '_', w: 0, l: 0, pct: 0, g: 0 });

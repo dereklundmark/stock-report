@@ -12,8 +12,8 @@ function renderHome() {
   const P2 = p2Name.toUpperCase();
   const dRanked = rankWinrate(D.dRoster);
   const eRanked = rankWinrate(D.eRoster);
-  const dMain = dRanked[0] || {};
-  const eMain = eRanked[0] || {};
+  const dMain = dRanked[0] || [...(D.dRoster||[])].sort((a,b)=>b.g-a.g)[0] || {};
+  const eMain = eRanked[0] || [...(D.eRoster||[])].sort((a,b)=>b.g-a.g)[0] || {};
   const dSlug = dMain.n ? toSlug(dMain.n) : '';
   const eSlug = eMain.n ? toSlug(eMain.n) : '';
   const dPortrait = makePortrait(
