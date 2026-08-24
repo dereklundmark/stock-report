@@ -24,9 +24,9 @@ async function loadSmashData(rivalryId = window._currentRivalryId || 1) {
   const rivalry = rRes.data || {};
   const rivalryInfo = {
     p1Name:  (rivalry.p1?.name  || 'P1'),
-    p1Color: (rivalry.p1?.color || '#FF5246'),
+    p1Color: '#FF5246',
     p2Name:  (rivalry.p2?.name  || 'P2'),
-    p2Color: (rivalry.p2?.color || '#1FA0E0')
+    p2Color: '#1FA0E0'
   };
 
   window.SMASH_DATA = compute(mRes.data || [], cRes.data || [], rivalryInfo);
