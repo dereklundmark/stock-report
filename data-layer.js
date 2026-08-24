@@ -62,7 +62,11 @@ function compute(raw, chars, rivalryInfo) {
 
   const norm = n =>
     (n || '').replace(/\bPokemon\b/g, 'Pokémon')
-             .replace(/Mr\. Game and Watch/gi, 'Mr. Game \u0026 Watch');
+             .replace(/Mr\. Game and Watch/gi, 'Mr. Game \u0026 Watch')
+             .replace(/\bShiek\b/gi, 'Sheik')
+             .replace(/\bDuck Hunt Duo\b/gi, 'Duck Hunt')
+             .replace(/\bMegaman\b/g, 'Mega Man')
+             .replace(/\bPacman\b/g, 'Pac-Man');
 
   const genCode = g => {
     if (!g) return 'X';
