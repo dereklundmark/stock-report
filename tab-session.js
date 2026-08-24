@@ -282,8 +282,14 @@ function renderSession() {
 
         <!-- NOTES -->
         <div style="margin-bottom:16px;">
-          <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;margin-bottom:6px;">NOTES (optional)</div>
+          ${window._notesExpanded ? `
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:#5C6470;">NOTES (optional)</div>
+            <div onclick="window._notesExpanded=false;render();" style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;cursor:pointer;touch-action:manipulation;padding:4px 8px;">hide ✕</div>
+          </div>
           <textarea id="session-note" oninput="setNote(this.value)" placeholder="Any notes for this match…" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#EDF0F3;resize:none;outline:none;min-height:52px;box-sizing:border-box;">${cm.note||''}</textarea>
+          ` : `
+          <div onclick="window._notesExpanded=true;render();" style="padding:10px 14px;border-radius:8px;border:1px dashed rgba(255,255,255,.1);font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;cursor:pointer;text-align:center;touch-action:manipulation;letter-spacing:.1em;">+ ADD NOTE</div>`}
         </div>
 
         <!-- LOG + REDO -->
