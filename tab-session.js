@@ -43,9 +43,15 @@ function renderSession() {
   const headerTitle = isLogin ? 'SIGN IN'
     : isSelect ? 'MY DASHBOARDS'
     : isCreate ? '<span onclick="goBackToSelect()" style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:#5C6470;cursor:pointer;">← BACK</span> &nbsp;NEW RIVALRY'
+    : isSession ? '<span onclick="goBackToSelect()" style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:#5C6470;cursor:pointer;">← BACK</span> &nbsp;GAME NIGHT'
     : 'GAME NIGHT';
 
+  const adminShortcut = (isSuperAdmin() && (isSelect || isSession || isCreate))
+    ? `<div onclick="goToAdminFromSession()" style="padding:5px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.08em;cursor:pointer;background:linear-gradient(135deg,rgba(197,36,27,.3),rgba(12,106,172,.3));border:1px solid rgba(255,255,255,.15);color:#EDF0F3;">⚡ ADMIN</div>`
+    : '';
+
   const headerRight = `
+    ${adminShortcut}
     ${isSession ? `<div onclick="clearSession()" style="padding:7px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.08);font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;color:#5C6470;">CLEAR</div>` : ''}
     ${S.isLoggedIn ? `<div onclick="logout()" style="padding:5px 10px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#5C6470;cursor:pointer;border:1px solid rgba(255,255,255,.07);">LOG OUT</div>` : ''}
     <div onclick="closeSession()" style="padding:7px 14px;border-radius:7px;background:rgba(255,255,255,.07);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;cursor:pointer;">✕</div>`;
@@ -83,7 +89,6 @@ function renderSession() {
     <div style="flex:1;overflow-y:auto;padding:24px;max-width:600px;width:100%;margin:0 auto;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:#5C6470;">SELECT A RIVALRY TO LOG MATCHES</div>
-        ${S.isAdmin ? `<div style="font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:800;letter-spacing:.12em;padding:3px 8px;border-radius:4px;background:linear-gradient(135deg,rgba(197,36,27,.3),rgba(12,106,172,.3));border:1px solid rgba(255,255,255,.15);color:#EDF0F3;">⚡ ADMIN</div>` : ''}
       </div>
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;">
         ${S.dashboards.map(d => `<div onclick="selectDashboard(${d.id})" style="display:flex;align-items:center;gap:14px;padding:16px 18px;background:#0F1217;border-radius:12px;border:1px solid rgba(255,255,255,.07);cursor:pointer;">

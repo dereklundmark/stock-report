@@ -274,9 +274,21 @@ function setTab(tab) {
 function toggleNav() { S.showNav = !S.showNav; render(); }
 function openSession() {
   Object.assign(S, { showSession: true, sessionScreen: S.isLoggedIn ? 'select' : 'login' });
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
   render();
 }
-function closeSession() { S.showSession = false; render(); }
+function closeSession() {
+  S.showSession = false;
+  document.body.style.overflow = '';
+  render();
+  window.scrollTo(0, 0);
+}
+function goToAdminFromSession() {
+  if (!isSuperAdmin()) return;
+  closeSession();
+  setTab('admin');
+}
 function diveDeeper() { setTab('prefs'); }
 
 // Auth
@@ -340,6 +352,7 @@ async function submitLogin() {
     sessionScreen: 'select',
     activeDashboard: null });
   render();
+  window.scrollTo(0, 0);
 }
 function submitLoginOnEnter(e) { if (e.key === 'Enter') submitLogin(); }
 async function logout() {
@@ -355,15 +368,16 @@ async function logout() {
 function selectDashboard(id) {
   Object.assign(S, { activeDashboard: id, sessionScreen: 'session', sessionMatches: [] });
   loadSmashData(id);
-  loadRecentMatches(id);
   render();
+  window.scrollTo(0, 0);
 }
 function goCreateDashboard() {
   S.sessionScreen = 'create';
   S.createP2 = ''; S.createP2Color = '#1FA0E0'; S.createError = '';
   render();
+  window.scrollTo(0, 0);
 }
-function goBackToSelect() { S.sessionScreen = 'select'; render(); }
+function goBackToSelect() { S.sessionScreen = 'select'; render(); window.scrollTo(0, 0); }
 function setCreateP1(val) { S.createP1 = val; render(); }
 function setCreateP2(val) { S.createP2 = val; render(); }
 function setCreateP1Color(c) { S.createP1Color = c; render(); }
