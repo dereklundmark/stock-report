@@ -5,7 +5,7 @@ function renderLore() {
   if (!D) return '<div style="padding:60px;text-align:center;color:#5C6470;">Loading…</div>';
 
   const T = D.totals;
-  const isP1P2 = (window._currentRivalryId || 1) === 1;
+  const isDefaultRivalry = (window._currentRivalryId || 1) === 1;
   const fs = D.firstStock || {};
   const shutout = D.shutout || { d:0,e:0,d51:0,e51:0 };
   const lr = D.lossRageScream || {};
@@ -136,7 +136,7 @@ function renderLore() {
 
   <!-- ROW 1: FIRST STOCK + HIGH PEAKS / LOW VALLEYS -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px;margin-bottom:14px;">
-${isP1P2 ? `    <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
+${isDefaultRivalry ? `    <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">FIRST STOCK CONVERSION</div>
       <div style="font-size:13px;color:#9AA3AF;margin-bottom:18px;line-height:1.5;">Taking the first stock wins the game <span style="color:#EDF0F3;font-weight:700;">${fs.overallPct||'—'}%</span> of the time.</div>
       <div style="display:flex;flex-direction:column;gap:14px;">
@@ -185,7 +185,7 @@ ${isP1P2 ? `    <div style="background:#0F1217;border-radius:14px;padding:24px;b
     </div>
   </div>
 
-  ${isP1P2 ? `<!-- AESTHETIC FIELD NOTES -->
+  ${isDefaultRivalry ? `<!-- AESTHETIC FIELD NOTES -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:14px;">
 
     <!-- P1'S TYPE -->
@@ -252,7 +252,7 @@ ${isP1P2 ? `    <div style="background:#0F1217;border-radius:14px;padding:24px;b
       <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#5C6470;line-height:1.6;">${p1Name} also does well with these characters (${monsterD.pct}%, ${monsterD.g}g) — but ${p2Name} transforms into a different player entirely. The bigger and scarier, the better.</div>
     </div>
   </div>` : ''}
-  ${isP1P2 ? `<!-- ROW 3: LOUDEST GAME + JIGGLYPUFF + POKÉMON TRAINER -->
+  ${isDefaultRivalry ? `<!-- ROW 3: LOUDEST GAME + JIGGLYPUFF + POKÉMON TRAINER -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px;">
     <div style="background:#0F1217;border-radius:14px;padding:24px;border:1px solid rgba(255,255,255,.05);">
       <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.18em;color:#5C6470;margin-bottom:6px;">LOUDEST GAME EVER</div>

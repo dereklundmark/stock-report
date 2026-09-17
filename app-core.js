@@ -45,7 +45,22 @@ const S = {
   myPlayerId:    null,
   myPlayerName:  '',
   myPlayerColor: '#FF5246',
-  sessionMatches: []
+  sessionMatches: [],
+
+  // Admin panel (only ever shown/usable when the players.is_admin flag is set — see isSuperAdmin())
+  adminLoaded: false,
+  adminLoading: false,
+  adminBusy: false,
+  adminError: '',
+  adminPlayers: [],
+  adminRivalries: [],
+  adminInvitations: [],
+  adminMatches: [],
+  adminMatchFilter: 'all',
+  adminMatchSearch: '',
+  adminMatchLimit: 50,
+  adminConfirm: null,      // { type: 'player'|'rivalry'|'match'|'invitation', id, title, message }
+  adminEditMatch: null     // working copy of a match row being edited, or null
 };
 
 // Restore persisted state
@@ -192,6 +207,13 @@ function esc(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// The admin tab/actions are only ever surfaced for the account flagged
+// is_admin = true in the players table. Real enforcement lives server-side
+// in Postgres RLS (see sql/rls-policies.sql) — this just controls the UI.
+function isSuperAdmin() {
+  return !!(S.isLoggedIn && S.isAdmin);
+}
+
 
 /* ─── NAV ────────────────────────────────────────────────────── */
 
@@ -203,6 +225,7 @@ function renderNav() {
     ['lore','LORE'],
     ['roster','ROSTER']
   ];
+  if (isSuperAdmin()) TABS.push(['admin','ADMIN']);
 
   const dtabs = TABS.map(([id, label]) => {
     const active = S.tab === id;
@@ -241,9 +264,11 @@ function renderNav() {
 /* ─── EVENT HANDLERS ─────────────────────────────────────────── */
 
 function setTab(tab) {
+  if (tab === 'admin' && !isSuperAdmin()) return;
   Object.assign(S, { tab, showNav: false });
   try { localStorage.setItem('smash_tab', tab); } catch(e) {}
   window.scrollTo(0, 0);
+  if (tab === 'admin' && !S.adminLoaded) loadAdminData();
   render();
 }
 function toggleNav() { S.showNav = !S.showNav; render(); }
@@ -319,7 +344,10 @@ async function submitLogin() {
 function submitLoginOnEnter(e) { if (e.key === 'Enter') submitLogin(); }
 async function logout() {
   await window._supabase.auth.signOut();
-  Object.assign(S, { isLoggedIn: false, sessionScreen: 'login', loginEmail: '', loginPassword: '', loginError: '' });
+  Object.assign(S, { isLoggedIn: false, sessionScreen: 'login', loginEmail: '', loginPassword: '', loginError: '',
+    tab: S.tab === 'admin' ? 'home' : S.tab,
+    adminLoaded: false, adminPlayers: [], adminRivalries: [], adminInvitations: [], adminMatches: [],
+    adminConfirm: null, adminEditMatch: null });
   render();
 }
 
@@ -538,6 +566,7 @@ function render() {
       case 'battlegrounds': content.innerHTML = renderBattlegrounds(); break;
       case 'lore':          content.innerHTML = renderLore(); break;
       case 'roster':        content.innerHTML = renderRoster(); break;
+      case 'admin':         content.innerHTML = isSuperAdmin() ? renderAdmin() : renderHome(); break;
       default:              content.innerHTML = renderHome();
     }
   }
