@@ -65,7 +65,7 @@ function renderSession() {
     <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;">
       <div style="width:100%;max-width:360px;">
         <div style="text-align:center;margin-bottom:36px;">
-          <div style="font-weight:900;font-size:28px;letter-spacing:-.02em;margin-bottom:4px;"><span style="color:#FF5246;letter-spacing:.04em;">STOCK</span> <span style="color:#5C6470;font-size:18px;font-weight:700;">✦</span> <span style="color:#1FA0E0;letter-spacing:.04em;">REPORT</span></div>
+          <div style="font-weight:900;font-size:28px;letter-spacing:-.02em;margin-bottom:4px;"><span style="color:#FF5246;letter-spacing:.04em;">STOCK</span> <span style="color:#1FA0E0;letter-spacing:.04em;">REPORT</span></div>
           <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:#5C6470;">SIGN IN TO LOG A MATCH</div>
         </div>
         <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px;">

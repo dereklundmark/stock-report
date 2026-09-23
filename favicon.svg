@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="r" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset="0" stop-color="#FF6357"/><stop offset=".5" stop-color="#C5241B"/></linearGradient>
+    <linearGradient id="b" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100"><stop offset=".5" stop-color="#2AB4F5"/><stop offset="1" stop-color="#0C6AAC"/></linearGradient>
+    <clipPath id="tl"><polygon points="0,0 100,0 0,100"/></clipPath>
+    <clipPath id="br"><polygon points="100,0 100,100 0,100"/></clipPath>
+  </defs>
+  <rect width="100" height="100" fill="#0B0D14"/>
+  <circle cx="50" cy="50" r="31.5" fill="none" stroke="url(#r)" stroke-width="9" clip-path="url(#tl)"/>
+  <circle cx="50" cy="50" r="31.5" fill="none" stroke="url(#b)" stroke-width="9" clip-path="url(#br)"/>
+  <line x1="0" y1="100" x2="100" y2="0" stroke="#0B0D14" stroke-width="2.8"/>
+  <rect x="35.5" y="52" width="7.5" height="10" rx="2.2" fill="#fff"/>
+  <rect x="45" y="42" width="7.5" height="20" rx="2.2" fill="#fff"/>
+  <rect x="54.5" y="32" width="7.5" height="30" rx="2.2" fill="#fff"/>
+</svg>

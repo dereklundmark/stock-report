@@ -1,5 +1,5 @@
 /* ================================================================
-   STOCK ✦ REPORT — app-core.js
+   STOCK REPORT — app-core.js
    Vanilla JS SPA. No framework, no build step.
    Requires: smash-data.js, smash-prefs.js, image-slot.js,
              tab-home.js, tab-teamsheet.js, tab-battlegrounds.js,
@@ -245,7 +245,6 @@ function renderNav() {
   return `<div style="max-width:960px;margin:0 auto;padding:0 14px;display:flex;align-items:stretch;justify-content:space-between;min-height:52px;">
     <div onclick="setTab('home')" style="display:flex;align-items:center;gap:8px;flex-shrink:0;padding:14px 0;cursor:pointer;">
       <span style="font-weight:900;font-size:13px;color:#FF5246;letter-spacing:.04em;">STOCK</span>
-      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:10px;color:#5C6470;">✦</span>
       <span style="font-weight:900;font-size:13px;color:#1FA0E0;letter-spacing:.04em;">REPORT</span>
     </div>
     <div class="tabs-desktop">${dtabs}</div>
